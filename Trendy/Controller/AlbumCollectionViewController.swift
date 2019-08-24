@@ -8,10 +8,11 @@
 
 import UIKit
 
-private let reuseIdentifier = "albumCell"
-private let trendingAlbumsUrl = "theaudiodb.com/api/v1/json/1/trending.php?country=us&type=itunes&format=albums"
-
 class AlbumCollectionViewController: UICollectionViewController {
+    
+    private let reuseIdentifier = "albumCell"
+    private let trendingAlbumsUrl : URL = URL(string: "theaudiodb.com/api/v1/json/1/trending.php?country=us&type=itunes&format=albums")!
+    private var albumArray : Array<Album>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,39 +24,45 @@ class AlbumCollectionViewController: UICollectionViewController {
         //self.collectionView!.register(AlbumCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         collectionView.delegate = self
         collectionView.dataSource = self
-
-        // Do any additional setup after loading the view.
+        //make request to api
     }
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using [segue destinationViewController].
-        // Pass the selected object to the new view controller.
-    }
-    */
 
     // MARK: UICollectionViewDataSource
-
     override func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
 
-
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return albumArray?.count ?? 0
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> AlbumCollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! AlbumCollectionViewCell
     
         // Configure the cell
-        //cell.albumArtImageView.image = //"https://www.theaudiodb.com/images/media/album/thumb/xtvvsp1565349442.jpg"
-        //cell.albumTitleLabel.text = "Port of Miami 2"
+        //cell.albumArtImageView.image =
+        //cell.albumTitleLabel.text = 
     
         return cell
+    }
+    
+    //MARK: - Retrieving Image
+    private func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
+        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
+    }
+    
+    private func downloadImage(from url: URL) {
+        print("Download started")
+        //var image : UIImage
+        getData(from: url) { (data, response, error) in
+            guard let data = data, error == nil else {return}
+            print(response?.suggestedFilename ?? url.lastPathComponent)
+            print("Download finished")
+            DispatchQueue.main.async {
+                //self.image = UIImage(data: data)
+                //self.collectionView.reloadData()
+            }
+        }
     }
 
     // MARK: UICollectionViewDelegate

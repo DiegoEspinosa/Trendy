@@ -6,25 +6,9 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--View Controller-->
-        <scene sceneID="tne-QT-ifu">
-            <objects>
-                <viewController id="BYZ-38-t0r" customClass="ViewController" customModule="Trendy" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="8bC-Xf-vdC">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="812" y="131"/>
-        </scene>
         <!--Album Collection View Controller-->
         <scene sceneID="BUg-1o-iYm">
             <objects>
@@ -53,32 +37,45 @@
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="J9l-Dk-h2f">
-                                            <rect key="frame" x="0.0" y="0.0" width="200" height="115"/>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="J9l-Dk-h2f">
+                                            <rect key="frame" x="42.5" y="0.0" width="115" height="115"/>
                                             <constraints>
-                                                <constraint firstAttribute="width" constant="200" id="cbY-Zj-MPz"/>
-                                                <constraint firstAttribute="height" constant="115" id="jcD-Uk-Eps"/>
+                                                <constraint firstAttribute="width" constant="115" id="NjW-Z5-JoG"/>
+                                                <constraint firstAttribute="height" constant="115" id="lIK-Tw-b4c"/>
                                             </constraints>
                                         </imageView>
                                     </subviews>
                                 </view>
                                 <constraints>
+                                    <constraint firstItem="J9l-Dk-h2f" firstAttribute="centerX" secondItem="uku-0P-Zkb" secondAttribute="centerX" id="3b9-96-lyA"/>
+                                    <constraint firstAttribute="trailing" secondItem="uku-0P-Zkb" secondAttribute="trailing" id="6Zk-gs-7D0"/>
+                                    <constraint firstItem="J9l-Dk-h2f" firstAttribute="top" secondItem="ZRl-qt-s9z" secondAttribute="top" id="6xa-Z9-dLs"/>
                                     <constraint firstAttribute="bottom" secondItem="uku-0P-Zkb" secondAttribute="bottom" id="FC5-G2-kQW"/>
-                                    <constraint firstItem="uku-0P-Zkb" firstAttribute="leading" secondItem="ZRl-qt-s9z" secondAttribute="leading" id="G6z-yz-WdC"/>
-                                    <constraint firstAttribute="trailing" secondItem="J9l-Dk-h2f" secondAttribute="trailing" id="c8o-BO-lhw"/>
-                                    <constraint firstItem="uku-0P-Zkb" firstAttribute="top" secondItem="J9l-Dk-h2f" secondAttribute="bottom" constant="8" id="f7e-IK-zgf"/>
-                                    <constraint firstItem="J9l-Dk-h2f" firstAttribute="top" secondItem="ZRl-qt-s9z" secondAttribute="top" id="j5S-cn-LdZ"/>
-                                    <constraint firstItem="J9l-Dk-h2f" firstAttribute="leading" secondItem="ZRl-qt-s9z" secondAttribute="leading" id="mol-ph-98T"/>
-                                    <constraint firstAttribute="trailing" secondItem="uku-0P-Zkb" secondAttribute="trailing" id="pu9-ef-sjX"/>
+                                    <constraint firstItem="uku-0P-Zkb" firstAttribute="leading" secondItem="ZRl-qt-s9z" secondAttribute="leading" id="dNn-5V-7PV"/>
+                                    <constraint firstItem="uku-0P-Zkb" firstAttribute="top" secondItem="J9l-Dk-h2f" secondAttribute="bottom" constant="8" id="hdm-pG-hS7"/>
                                 </constraints>
                                 <connections>
                                     <outlet property="albumArtImageView" destination="J9l-Dk-h2f" id="nza-HS-Lwo"/>
+                                    <outlet property="albumTitleLabel" destination="uku-0P-Zkb" id="2pK-hq-Y9c"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
                         <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="AeF-Iz-yMu">
                             <rect key="frame" x="0.0" y="0.0" width="375" height="50"/>
                             <autoresizingMask key="autoresizingMask"/>
+                            <subviews>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Trending Albums" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dE1-gV-roF">
+                                    <rect key="frame" x="79.5" y="8" width="216" height="34"/>
+                                    <fontDescription key="fontDescription" style="UICTFontTextStyleTitle0"/>
+                                    <nil key="textColor"/>
+                                    <nil key="highlightedColor"/>
+                                </label>
+                            </subviews>
+                            <constraints>
+                                <constraint firstItem="dE1-gV-roF" firstAttribute="centerX" secondItem="AeF-Iz-yMu" secondAttribute="centerX" id="IIj-Qm-C8h"/>
+                                <constraint firstAttribute="bottom" secondItem="dE1-gV-roF" secondAttribute="bottom" constant="8" id="gGh-SE-6Ea"/>
+                                <constraint firstItem="dE1-gV-roF" firstAttribute="top" secondItem="AeF-Iz-yMu" secondAttribute="top" constant="8" id="wvi-Lh-hdB"/>
+                            </constraints>
                         </collectionReusableView>
                         <connections>
                             <outlet property="dataSource" destination="E7t-nx-XaH" id="5ny-zD-IyY"/>
