@@ -7,24 +7,20 @@
 //
 
 import UIKit
+import Alamofire
 
 class AlbumCollectionViewController: UICollectionViewController {
     
     private let reuseIdentifier = "albumCell"
-    private let trendingAlbumsUrl : URL = URL(string: "theaudiodb.com/api/v1/json/1/trending.php?country=us&type=itunes&format=albums")!
-    private var albumArray : Array<Album>?
+    private let trendingAlbumsUrl : URL = URL(string: "https://theaudiodb.com/api/v1/json/1/trending.php?country=us&type=itunes&format=albums&country=us&type=itunes&format=albums")!
+    private var albumArray : Array<Album> = []
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Register cell classes
-        //self.collectionView!.register(AlbumCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         collectionView.delegate = self
         collectionView.dataSource = self
-        //make request to api
+        fetchTrendingAlbums(from: trendingAlbumsUrl)
     }
 
     // MARK: UICollectionViewDataSource
@@ -33,67 +29,67 @@ class AlbumCollectionViewController: UICollectionViewController {
     }
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return albumArray?.count ?? 0
+        return albumArray.count
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> AlbumCollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! AlbumCollectionViewCell
-    
         // Configure the cell
-        //cell.albumArtImageView.image =
-        //cell.albumTitleLabel.text = 
-    
+        let album = albumArray[indexPath.row]
+        cell.albumArtImageView.downloaded(from: album.albumImageUrl, contentMode: .scaleAspectFill)
+        cell.albumTitleLabel.text = album.albumTitle
+        cell.albumArtistLabel.text = album.albumArtist
+        cell.albumRankLabel.text = String(album.albumRank)
         return cell
     }
     
-    //MARK: - Retrieving Image
-    private func getData(from url: URL, completion: @escaping (Data?, URLResponse?, Error?) -> ()) {
-        URLSession.shared.dataTask(with: url, completionHandler: completion).resume()
-    }
-    
-    private func downloadImage(from url: URL) {
-        print("Download started")
-        //var image : UIImage
-        getData(from: url) { (data, response, error) in
-            guard let data = data, error == nil else {return}
-            print(response?.suggestedFilename ?? url.lastPathComponent)
-            print("Download finished")
-            DispatchQueue.main.async {
-                //self.image = UIImage(data: data)
-                //self.collectionView.reloadData()
+    //MARK: - Private functions    
+    private func fetchTrendingAlbums(from url: URL) {
+        Alamofire.request(url, method: .get).responseJSON { (response) in
+            if response.result.isSuccess {
+                if let jsonResult = response.result.value as? [String: Any] {
+                    if let albumJson = jsonResult["trending"] as? NSArray {
+                        self.createAlbumObjects(albumJsonArray: albumJson)
+                    }
+                }
             }
         }
     }
-
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
     
+    private func createAlbumObjects(albumJsonArray: NSArray) {
+        for album in albumJsonArray {
+            let albumInfo = album as? NSDictionary
+            let albumObject = Album(rank: albumInfo?["intChartPlace"] as! String, title: albumInfo?["strAlbum"] as! String, artist: albumInfo?["strArtist"] as! String ,imageUrl: albumInfo?["strAlbumThumb"] as! String)
+            albumArray.append(albumObject)
+        }
+        sortAlbumInOrder()
+        collectionView.reloadData()
     }
-    */
+    
+    private func sortAlbumInOrder() {
+        albumArray = albumArray.sorted(by: {$0.albumRank < $1.albumRank})
+    }
+}
 
+//MARK: - UIImageView Extension
+extension UIImageView {
+    func downloaded(from url: URL, contentMode mode: UIView.ContentMode = .scaleAspectFit) {
+        contentMode = mode
+        URLSession.shared.dataTask(with: url) { data, response, error in
+            guard
+                let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
+                let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
+                let data = data, error == nil,
+                let image = UIImage(data: data)
+                else { return }
+            DispatchQueue.main.async() {
+                self.image = image
+            }
+        }.resume()
+    }
+    
+    func downloaded(from link: String, contentMode mode: UIView.ContentMode = .scaleAspectFit) {
+        guard let url = URL(string: link) else { return }
+        downloaded(from: url, contentMode: mode)
+    }
 }

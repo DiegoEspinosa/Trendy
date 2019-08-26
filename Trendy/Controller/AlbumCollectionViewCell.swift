@@ -12,5 +12,7 @@ class AlbumCollectionViewCell: UICollectionViewCell {
     
     @IBOutlet weak var albumArtImageView: UIImageView!
     @IBOutlet weak var albumTitleLabel: UILabel!
+    @IBOutlet weak var albumArtistLabel: UILabel!
+    @IBOutlet weak var albumRankLabel: UILabel!
     
 }

@@ -7,14 +7,19 @@
 //
 
 import Foundation
+import UIKit
 
 class Album {
+    public var albumRank : Int = 0
     public var albumTitle : String = ""
+    public var albumArtist : String = ""
     public var albumImageUrl : String = ""
+    public var albumImage : UIImage = UIImage()
     
-    init(title: String, imageUrl: String) {
+    init(rank: String, title: String, artist: String, imageUrl: String) {
+        albumRank = Int(rank)!
         albumTitle = title
+        albumArtist = artist
         albumImageUrl = imageUrl
     }
-    
 }
