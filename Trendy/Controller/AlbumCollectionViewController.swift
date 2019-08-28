@@ -14,7 +14,8 @@ class AlbumCollectionViewController: UICollectionViewController {
     private let reuseIdentifier = "albumCell"
     private let trendingAlbumsUrl : URL = URL(string: "https://theaudiodb.com/api/v1/json/1/trending.php?country=us&type=itunes&format=albums&country=us&type=itunes&format=albums")!
     private var albumArray : Array<Album> = []
-
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -43,8 +44,9 @@ class AlbumCollectionViewController: UICollectionViewController {
         return cell
     }
     
-    //MARK: - Private functions    
+    //MARK: - Private functions
     private func fetchTrendingAlbums(from url: URL) {
+        activityIndicatorView.startAnimating()
         Alamofire.request(url, method: .get).responseJSON { (response) in
             if response.result.isSuccess {
                 if let jsonResult = response.result.value as? [String: Any] {
@@ -52,22 +54,23 @@ class AlbumCollectionViewController: UICollectionViewController {
                         self.createAlbumObjects(albumJsonArray: albumJson)
                     }
                 }
+            } else {
+                let alert = UIAlertController(title: "Something went wrong", message: "There was a problem retrieving data. Please try again", preferredStyle: .alert)
+                let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alert.addAction(action)
+                self.present(alert, animated: true, completion: nil)
             }
         }
     }
     
     private func createAlbumObjects(albumJsonArray: NSArray) {
-        for album in albumJsonArray {
+        for album in albumJsonArray.reversed() {
             let albumInfo = album as? NSDictionary
             let albumObject = Album(rank: albumInfo?["intChartPlace"] as! String, title: albumInfo?["strAlbum"] as! String, artist: albumInfo?["strArtist"] as! String ,imageUrl: albumInfo?["strAlbumThumb"] as! String)
             albumArray.append(albumObject)
         }
-        sortAlbumInOrder()
         collectionView.reloadData()
-    }
-    
-    private func sortAlbumInOrder() {
-        albumArray = albumArray.sorted(by: {$0.albumRank < $1.albumRank})
+        activityIndicatorView.stopAnimating()
     }
 }
 

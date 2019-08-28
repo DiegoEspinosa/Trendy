@@ -14,7 +14,7 @@ class Album {
     public var albumTitle : String = ""
     public var albumArtist : String = ""
     public var albumImageUrl : String = ""
-    public var albumImage : UIImage = UIImage()
+    
     
     init(rank: String, title: String, artist: String, imageUrl: String) {
         albumRank = Int(rank)!
