@@ -50,7 +50,6 @@
 				AAE002801355201AA8BA342F /* Pods-Trendy.debug.xcconfig */,
 				24009011B40EF77C1E27372F /* Pods-Trendy.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
