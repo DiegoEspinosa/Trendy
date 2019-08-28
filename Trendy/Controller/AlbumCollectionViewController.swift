@@ -21,6 +21,7 @@ class AlbumCollectionViewController: UICollectionViewController {
 
         collectionView.delegate = self
         collectionView.dataSource = self
+        //call to loadAllAlbums instead of fetchTrendingAlbums
         fetchTrendingAlbums(from: trendingAlbumsUrl)
     }
 
@@ -42,6 +43,18 @@ class AlbumCollectionViewController: UICollectionViewController {
         cell.albumArtistLabel.text = album.albumArtist
         cell.albumRankLabel.text = String(album.albumRank)
         return cell
+    }
+    
+    private func loadAllAlbums(from url: URL) {
+        //begin activityIndicator animation
+        
+        //pass in url into fetchTrendingAlbums
+        
+        //fetchTrendingAlbums returns value to be passed into createAlbumObjects
+        
+        //createAlbumObjects with value to be passed in
+        
+        //stop activityIndicator animation
     }
     
     //MARK: - Private functions
