@@ -14,7 +14,8 @@ class AlbumCollectionViewController: UICollectionViewController {
     private let reuseIdentifier = "albumCell"
     private let trendingAlbumsUrl : URL = URL(string: "https://theaudiodb.com/api/v1/json/1/trending.php?country=us&type=itunes&format=albums&country=us&type=itunes&format=albums")!
     private var albumArray : Array<Album> = []
-
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -43,8 +44,9 @@ class AlbumCollectionViewController: UICollectionViewController {
         return cell
     }
     
-    //MARK: - Private functions    
+    //MARK: - Private functions
     private func fetchTrendingAlbums(from url: URL) {
+        activityIndicatorView.startAnimating()
         Alamofire.request(url, method: .get).responseJSON { (response) in
             if response.result.isSuccess {
                 if let jsonResult = response.result.value as? [String: Any] {
@@ -64,6 +66,7 @@ class AlbumCollectionViewController: UICollectionViewController {
         }
         sortAlbumInOrder()
         collectionView.reloadData()
+        activityIndicatorView.stopAnimating()
     }
     
     private func sortAlbumInOrder() {
