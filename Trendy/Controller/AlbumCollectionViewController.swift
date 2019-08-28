@@ -52,9 +52,7 @@ class AlbumCollectionViewController: UICollectionViewController {
                     let jsonDecoder = JSONDecoder()
                     let root = try jsonDecoder.decode(Root.self, from: jsonData!)
                     let albums = root.trending
-                    for album in albums {
-                        print("Album: \(album)")
-                    }
+                    self.createAlbumObjects(albumJsonArray: albums)
                 } catch {
                     print("Error: \(error)")
                 }
@@ -62,10 +60,9 @@ class AlbumCollectionViewController: UICollectionViewController {
         }
     }
     
-    private func createAlbumObjects(albumJsonArray: NSArray) {
+    private func createAlbumObjects(albumJsonArray: [AlbumData]) {
         for album in albumJsonArray {
-            let albumInfo = album as? NSDictionary
-            let albumObject = Album(rank: albumInfo?["intChartPlace"] as! String, title: albumInfo?["strAlbum"] as! String, artist: albumInfo?["strArtist"] as! String ,imageUrl: albumInfo?["strAlbumThumb"] as! String)
+            let albumObject = Album(rank: album.intChartPlace, title: album.strAlbum, artist: album.strArtist, imageUrl: album.strAlbumThumb)
             albumArray.append(albumObject)
         }
         sortAlbumInOrder()
