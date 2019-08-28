@@ -57,17 +57,12 @@ class AlbumCollectionViewController: UICollectionViewController {
     }
     
     private func createAlbumObjects(albumJsonArray: NSArray) {
-        for album in albumJsonArray {
+        for album in albumJsonArray.reversed() {
             let albumInfo = album as? NSDictionary
             let albumObject = Album(rank: albumInfo?["intChartPlace"] as! String, title: albumInfo?["strAlbum"] as! String, artist: albumInfo?["strArtist"] as! String ,imageUrl: albumInfo?["strAlbumThumb"] as! String)
             albumArray.append(albumObject)
         }
-        sortAlbumInOrder()
         collectionView.reloadData()
-    }
-    
-    private func sortAlbumInOrder() {
-        albumArray = albumArray.sorted(by: {$0.albumRank < $1.albumRank})
     }
 }
 
