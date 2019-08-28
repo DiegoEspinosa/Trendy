@@ -52,6 +52,11 @@ class AlbumCollectionViewController: UICollectionViewController {
                         self.createAlbumObjects(albumJsonArray: albumJson)
                     }
                 }
+            } else {
+                let alert = UIAlertController(title: "Something went wrong", message: "There was a problem retrieving data. Please try again", preferredStyle: .alert)
+                let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alert.addAction(action)
+                self.present(alert, animated: true, completion: nil)
             }
         }
     }
