@@ -47,10 +47,16 @@ class AlbumCollectionViewController: UICollectionViewController {
     private func fetchTrendingAlbums(from url: URL) {
         Alamofire.request(url, method: .get).responseJSON { (response) in
             if response.result.isSuccess {
-                if let jsonResult = response.result.value as? [String: Any] {
-                    if let albumJson = jsonResult["trending"] as? NSArray {
-                        self.createAlbumObjects(albumJsonArray: albumJson)
+                let jsonData = response.data
+                do {
+                    let jsonDecoder = JSONDecoder()
+                    let root = try jsonDecoder.decode(Root.self, from: jsonData!)
+                    let albums = root.trending
+                    for album in albums {
+                        print("Album: \(album)")
                     }
+                } catch {
+                    print("Error: \(error)")
                 }
             }
         }
