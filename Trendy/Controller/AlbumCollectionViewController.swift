@@ -14,7 +14,8 @@ class AlbumCollectionViewController: UICollectionViewController {
     private let reuseIdentifier = "albumCell"
     private let trendingAlbumsUrl : URL = URL(string: "https://theaudiodb.com/api/v1/json/1/trending.php?country=us&type=itunes&format=albums&country=us&type=itunes&format=albums")!
     private var albumArray : Array<Album> = []
-
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -43,8 +44,9 @@ class AlbumCollectionViewController: UICollectionViewController {
         return cell
     }
     
-    //MARK: - Private functions    
+    //MARK: - Private functions
     private func fetchTrendingAlbums(from url: URL) {
+        activityIndicatorView.startAnimating()
         Alamofire.request(url, method: .get).responseJSON { (response) in
             if response.result.isSuccess {
                 let jsonData = response.data
@@ -56,6 +58,11 @@ class AlbumCollectionViewController: UICollectionViewController {
                 } catch {
                     print("Error: \(error)")
                 }
+            } else {
+                let alert = UIAlertController(title: "Something went wrong", message: "There was a problem retrieving data. Please try again", preferredStyle: .alert)
+                let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alert.addAction(action)
+                self.present(alert, animated: true, completion: nil)
             }
         }
     }
@@ -65,12 +72,8 @@ class AlbumCollectionViewController: UICollectionViewController {
             let albumObject = Album(rank: album.intChartPlace, title: album.strAlbum, artist: album.strArtist, imageUrl: album.strAlbumThumb)
             albumArray.append(albumObject)
         }
-        sortAlbumInOrder()
         collectionView.reloadData()
-    }
-    
-    private func sortAlbumInOrder() {
-        albumArray = albumArray.sorted(by: {$0.albumRank < $1.albumRank})
+        activityIndicatorView.stopAnimating()
     }
 }
 

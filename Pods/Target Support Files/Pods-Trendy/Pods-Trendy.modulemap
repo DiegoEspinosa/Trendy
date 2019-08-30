@@ -1,0 +1,6 @@
+framework module Pods_Trendy {
+  umbrella header "Pods-Trendy-umbrella.h"
+
+  export *
+  module * { export * }
+}
