@@ -21,8 +21,7 @@ class AlbumCollectionViewController: UICollectionViewController {
 
         collectionView.delegate = self
         collectionView.dataSource = self
-        //call to loadAllAlbums instead of fetchTrendingAlbums
-        fetchTrendingAlbums(from: trendingAlbumsUrl)
+        loadAllAlbums(from: trendingAlbumsUrl)
     }
 
     // MARK: UICollectionViewDataSource
@@ -38,7 +37,7 @@ class AlbumCollectionViewController: UICollectionViewController {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! AlbumCollectionViewCell
         // Configure the cell
         let album = albumArray[indexPath.row]
-        cell.albumArtImageView.downloaded(from: album.albumImageUrl, contentMode: .scaleAspectFill)
+        cell.albumArtImageView.downloadImage(from: album.albumImageUrl, contentMode: .scaleAspectFill)
         cell.albumTitleLabel.text = album.albumTitle
         cell.albumArtistLabel.text = album.albumArtist
         cell.albumRankLabel.text = String(album.albumRank)
@@ -46,20 +45,22 @@ class AlbumCollectionViewController: UICollectionViewController {
     }
     
     private func loadAllAlbums(from url: URL) {
-        //begin activityIndicator animation
+        activityIndicatorView.isHidden = false
+        activityIndicatorView.startAnimating()
         
-        //pass in url into fetchTrendingAlbums
+        //let albumDataArray = fetchTrendingAlbums(from: url, albumDataCompletionHandler: (AlbumData?, Error?))
+        //fetchTrendingAlbums(from: url) { (album, error) in
+            //if let albumData =
+        //}
         
-        //fetchTrendingAlbums returns value to be passed into createAlbumObjects
+        //createAlbumObjects(albumJsonArray: albumDataArray)
         
-        //createAlbumObjects with value to be passed in
-        
-        //stop activityIndicator animation
+        activityIndicatorView.stopAnimating()
+        activityIndicatorView.isHidden = true
     }
     
     //MARK: - Private functions
-    private func fetchTrendingAlbums(from url: URL) {
-        activityIndicatorView.startAnimating()
+    private func fetchTrendingAlbums(from url: URL, albumDataCompletionHandler: @escaping ([AlbumData]?, Error?) -> Void){
         Alamofire.request(url, method: .get).responseJSON { (response) in
             if response.result.isSuccess {
                 let jsonData = response.data
@@ -67,7 +68,7 @@ class AlbumCollectionViewController: UICollectionViewController {
                     let jsonDecoder = JSONDecoder()
                     let root = try jsonDecoder.decode(Root.self, from: jsonData!)
                     let albums = root.trending
-                    self.createAlbumObjects(albumJsonArray: albums)
+                    albumDataCompletionHandler(albums, nil)
                 } catch {
                     print("Error: \(error)")
                 }
@@ -76,6 +77,7 @@ class AlbumCollectionViewController: UICollectionViewController {
                 let action = UIAlertAction(title: "OK", style: .default, handler: nil)
                 alert.addAction(action)
                 self.present(alert, animated: true, completion: nil)
+                albumDataCompletionHandler(nil, response.error)
             }
         }
     }
@@ -87,28 +89,5 @@ class AlbumCollectionViewController: UICollectionViewController {
         }
         collectionView.reloadData()
         activityIndicatorView.stopAnimating()
-    }
-}
-
-//MARK: - UIImageView Extension
-extension UIImageView {
-    func downloaded(from url: URL, contentMode mode: UIView.ContentMode = .scaleAspectFit) {
-        contentMode = mode
-        URLSession.shared.dataTask(with: url) { data, response, error in
-            guard
-                let httpURLResponse = response as? HTTPURLResponse, httpURLResponse.statusCode == 200,
-                let mimeType = response?.mimeType, mimeType.hasPrefix("image"),
-                let data = data, error == nil,
-                let image = UIImage(data: data)
-                else { return }
-            DispatchQueue.main.async() {
-                self.image = image
-            }
-        }.resume()
-    }
-    
-    func downloaded(from link: String, contentMode mode: UIView.ContentMode = .scaleAspectFit) {
-        guard let url = URL(string: link) else { return }
-        downloaded(from: url, contentMode: mode)
     }
 }
