@@ -9,6 +9,8 @@
 import UIKit
 
 class AlbumInfoTableViewController: UITableViewController {
+    
+    var album : Album?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -31,14 +33,16 @@ class AlbumInfoTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = UIView.init(frame: CGRect.init(x: 0, y: 0, width: Int(tableView.frame.width), height: 250))
         
-        //let imageView = UIImageView.init(frame: CGRect.init(x: 5, y: 5, width: 50, height: 50))
-        //imageView.image =
+        let imageView = UIImageView.init(frame: CGRect.init(x: (header.frame.width / 2) - 75, y: 20, width: 150 , height: 150))
+        imageView.downloaded(from: (album?.albumImageUrl)!)
         
         let title = UILabel()
-        title.frame = CGRect.init(x: 10, y: 10, width: 100, height: 25)
-        title.text = "Album Title"
+        title.frame = CGRect.init(x: (header.frame.width / 2) - 25, y: 180, width: 100, height: 25)
+        title.text = album?.albumTitle
         title.font = UIFont.systemFont(ofSize: 16)
         title.textColor = UIColor.black
+        
+        header.addSubview(imageView)
         header.addSubview(title)
         
         header.clipsToBounds = true

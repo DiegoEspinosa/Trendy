@@ -44,6 +44,17 @@ class AlbumCollectionViewController: UICollectionViewController {
         return cell
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.destination is AlbumInfoTableViewController {
+            guard let albumInfoTableVC = segue.destination as? AlbumInfoTableViewController else {fatalError("Error setting table view controller")}
+            guard let selectedCell = sender as? AlbumCollectionViewCell else {fatalError("Error setting cell")}
+            guard let indexPath = collectionView.indexPath(for: selectedCell) else {fatalError("Error getting indexPath")}
+            
+            let selectedAlbum = albumArray[indexPath.row]
+            albumInfoTableVC.album = selectedAlbum
+        }
+    }
+    
     //MARK: - Private functions
     private func fetchTrendingAlbums(from url: URL) {
         activityIndicatorView.isHidden = false
