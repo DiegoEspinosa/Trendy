@@ -49,11 +49,10 @@ class AlbumCollectionViewController: UICollectionViewController {
         activityIndicatorView.startAnimating()
         
         //let albumDataArray = fetchTrendingAlbums(from: url, albumDataCompletionHandler: (AlbumData?, Error?))
-        //fetchTrendingAlbums(from: url) { (album, error) in
-            //if let albumData =
-        //}
-        
-        //createAlbumObjects(albumJsonArray: albumDataArray)
+        fetchTrendingAlbums(from: url) { (album, error) in
+            guard let albumDataArray = album else {fatalError("error setting album") }
+            self.createAlbumObjects(albumJsonArray: albumDataArray)
+        }
         
         activityIndicatorView.stopAnimating()
         activityIndicatorView.isHidden = true
@@ -83,7 +82,7 @@ class AlbumCollectionViewController: UICollectionViewController {
     }
     
     private func createAlbumObjects(albumJsonArray: [AlbumData]) {
-        for album in albumJsonArray {
+        for album in albumJsonArray.reversed() {
             let albumObject = Album(rank: album.intChartPlace, title: album.strAlbum, artist: album.strArtist, imageUrl: album.strAlbumThumb)
             albumArray.append(albumObject)
         }
