@@ -44,6 +44,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1118204D952575BEC653BE0C /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				AAE002801355201AA8BA342F /* Pods-Trendy.debug.xcconfig */,
+				24009011B40EF77C1E27372F /* Pods-Trendy.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
 		27FA43E846100F8FB76CD2EF /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (

@@ -23,3 +23,14 @@ class Album {
         albumImageUrl = imageUrl
     }
 }
+
+struct Root: Decodable {
+    let trending : [AlbumData]
+}
+
+struct AlbumData: Decodable {
+    var intChartPlace : String
+    var strAlbum : String
+    var strArtist : String
+    var strAlbumThumb : String
+}

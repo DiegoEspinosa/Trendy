@@ -49,10 +49,14 @@ class AlbumCollectionViewController: UICollectionViewController {
         activityIndicatorView.startAnimating()
         Alamofire.request(url, method: .get).responseJSON { (response) in
             if response.result.isSuccess {
-                if let jsonResult = response.result.value as? [String: Any] {
-                    if let albumJson = jsonResult["trending"] as? NSArray {
-                        self.createAlbumObjects(albumJsonArray: albumJson)
-                    }
+                let jsonData = response.data
+                do {
+                    let jsonDecoder = JSONDecoder()
+                    let root = try jsonDecoder.decode(Root.self, from: jsonData!)
+                    let albums = root.trending
+                    self.createAlbumObjects(albumJsonArray: albums)
+                } catch {
+                    print("Error: \(error)")
                 }
             } else {
                 let alert = UIAlertController(title: "Something went wrong", message: "There was a problem retrieving data. Please try again", preferredStyle: .alert)
@@ -63,10 +67,9 @@ class AlbumCollectionViewController: UICollectionViewController {
         }
     }
     
-    private func createAlbumObjects(albumJsonArray: NSArray) {
-        for album in albumJsonArray.reversed() {
-            let albumInfo = album as? NSDictionary
-            let albumObject = Album(rank: albumInfo?["intChartPlace"] as! String, title: albumInfo?["strAlbum"] as! String, artist: albumInfo?["strArtist"] as! String ,imageUrl: albumInfo?["strAlbumThumb"] as! String)
+    private func createAlbumObjects(albumJsonArray: [AlbumData]) {
+        for album in albumJsonArray {
+            let albumObject = Album(rank: album.intChartPlace, title: album.strAlbum, artist: album.strArtist, imageUrl: album.strAlbumThumb)
             albumArray.append(albumObject)
         }
         collectionView.reloadData()
