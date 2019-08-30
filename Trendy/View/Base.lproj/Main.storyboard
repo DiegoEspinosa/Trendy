@@ -85,6 +85,7 @@
                                     <outlet property="albumArtistLabel" destination="cuU-HG-Lwp" id="TkH-Dr-TJy"/>
                                     <outlet property="albumRankLabel" destination="ssb-0W-n4i" id="g9q-I2-ige"/>
                                     <outlet property="albumTitleLabel" destination="uku-0P-Zkb" id="2pK-hq-Y9c"/>
+                                    <segue destination="ziG-D0-53S" kind="show" identifier="toAlbumInfo" id="D2J-bS-kEX"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -101,6 +102,34 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fWJ-78-XI3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="775" y="131"/>
+        </scene>
+        <!--Album Info Table View Controller-->
+        <scene sceneID="U3z-Zv-ZEw">
+            <objects>
+                <tableViewController id="ziG-D0-53S" customClass="AlbumInfoTableViewController" customModule="Trendy" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="qRz-JZ-Psa">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="albumInfoCell" id="KHU-qC-pQF" customClass="AlbumInfoTableViewCell" customModule="Trendy" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="KHU-qC-pQF" id="9Wy-tA-5c1">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="ziG-D0-53S" id="Xea-UZ-iQC"/>
+                            <outlet property="delegate" destination="ziG-D0-53S" id="OPN-P4-3ke"/>
+                        </connections>
+                    </tableView>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mrw-Kl-War" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1466" y="131"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="XL0-eQ-KGG">

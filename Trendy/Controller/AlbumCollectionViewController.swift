@@ -46,6 +46,7 @@ class AlbumCollectionViewController: UICollectionViewController {
     
     //MARK: - Private functions
     private func fetchTrendingAlbums(from url: URL) {
+        activityIndicatorView.isHidden = false
         activityIndicatorView.startAnimating()
         Alamofire.request(url, method: .get).responseJSON { (response) in
             if response.result.isSuccess {
@@ -74,6 +75,7 @@ class AlbumCollectionViewController: UICollectionViewController {
         }
         collectionView.reloadData()
         activityIndicatorView.stopAnimating()
+        activityIndicatorView.isHidden = true
     }
 }
 
