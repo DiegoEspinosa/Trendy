@@ -36,10 +36,12 @@ class AlbumInfoTableViewController: UITableViewController {
         let imageView = UIImageView.init(frame: CGRect.init(x: (header.frame.width / 2) - 75, y: 20, width: 150 , height: 150))
         imageView.downloaded(from: (album?.albumImageUrl)!)
         
-        let title = createAlbumTitleLabel(header: header)
+        let titleLabel = createAlbumTitleLabel(header: header)
+        let artistLabel = createAlbumArtistLabel(header: header)
         
         header.addSubview(imageView)
-        header.addSubview(title)
+        header.addSubview(titleLabel)
+        header.addSubview(artistLabel)
         
         header.clipsToBounds = true
         return header
@@ -75,6 +77,16 @@ class AlbumInfoTableViewController: UITableViewController {
         title.textColor = UIColor.black
         title.textAlignment = .center
         return title
+    }
+    
+    private func createAlbumArtistLabel(header: UIView) -> UILabel {
+        let artist = UILabel()
+        artist.frame = CGRect.init(x: 0, y: 205, width: header.frame.width, height: 25)
+        artist.text = album?.albumArtist
+        artist.font = UIFont.systemFont(ofSize: 16)
+        artist.textColor = UIColor.black
+        artist.textAlignment = .center
+        return artist
     }
 
 }
