@@ -10,6 +10,11 @@ import UIKit
 
 class AlbumInfoTableViewController: UITableViewController {
     
+    private let API_KEY = 195003
+    private let albumInfoAPI = "https://theaudiodb.com/api/v1/json/{APIKEY}/album.php?m={albumid}"
+    private let albumTracksAPI = "https://theaudiodb.com/api/v1/json/{APIKEY}/track.php?m={albumid}"
+
+    
     var album : Album?
 
     override func viewDidLoad() {
