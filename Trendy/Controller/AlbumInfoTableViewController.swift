@@ -36,11 +36,7 @@ class AlbumInfoTableViewController: UITableViewController {
         let imageView = UIImageView.init(frame: CGRect.init(x: (header.frame.width / 2) - 75, y: 20, width: 150 , height: 150))
         imageView.downloaded(from: (album?.albumImageUrl)!)
         
-        let title = UILabel()
-        title.frame = CGRect.init(x: (header.frame.width / 2) - 25, y: 180, width: 100, height: 25)
-        title.text = album?.albumTitle
-        title.font = UIFont.systemFont(ofSize: 16)
-        title.textColor = UIColor.black
+        let title = createAlbumTitleLabel(header: header)
         
         header.addSubview(imageView)
         header.addSubview(title)
@@ -61,9 +57,6 @@ class AlbumInfoTableViewController: UITableViewController {
 
         return cell
     }
-    
-    
-    
     /*
     // MARK: - Navigation
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -72,5 +65,16 @@ class AlbumInfoTableViewController: UITableViewController {
         // Pass the selected object to the new view controller.
     }
     */
+    
+    //MARK: - Private Functions
+    private func createAlbumTitleLabel(header: UIView) -> UILabel {
+        let title = UILabel()
+        title.frame = CGRect.init(x: 0, y: 180, width: header.frame.width, height: 25)
+        title.text = album?.albumTitle
+        title.font = UIFont.systemFont(ofSize: 16)
+        title.textColor = UIColor.black
+        title.textAlignment = .center
+        return title
+    }
 
 }
