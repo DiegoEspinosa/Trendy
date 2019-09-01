@@ -11,8 +11,8 @@ import UIKit
 class AlbumInfoTableViewController: UITableViewController {
     
     private let API_KEY = 195003
-    private let albumInfoAPI = "https://theaudiodb.com/api/v1/json/{APIKEY}/album.php?m={albumid}"
-    private let albumTracksAPI = "https://theaudiodb.com/api/v1/json/{APIKEY}/track.php?m={albumid}"
+    private let albumInfoString = "https://theaudiodb.com/api/v1/json/{APIKEY}/album.php?m={albumid}"
+    private let albumTracksString = "https://theaudiodb.com/api/v1/json/{APIKEY}/track.php?m={albumid}"
 
     
     var album : Album?
@@ -38,15 +38,17 @@ class AlbumInfoTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let header = UIView.init(frame: CGRect.init(x: 0, y: 0, width: Int(tableView.frame.width), height: 250))
         
-        let imageView = UIImageView.init(frame: CGRect.init(x: (header.frame.width / 2) - 75, y: 20, width: 150 , height: 150))
+        let imageView = UIImageView.init(frame: CGRect.init(x: (header.frame.width / 2) - 75, y: 8, width: 150 , height: 150))
         imageView.downloaded(from: (album?.albumImageUrl)!)
         
         let titleLabel = createAlbumTitleLabel(header: header)
         let artistLabel = createAlbumArtistLabel(header: header)
+        let genreLabel = createAlbumGenreLabel(header: header)
         
         header.addSubview(imageView)
         header.addSubview(titleLabel)
         header.addSubview(artistLabel)
+        header.addSubview(genreLabel)
         
         header.clipsToBounds = true
         return header
@@ -76,7 +78,7 @@ class AlbumInfoTableViewController: UITableViewController {
     //MARK: - Private Functions
     private func createAlbumTitleLabel(header: UIView) -> UILabel {
         let title = UILabel()
-        title.frame = CGRect.init(x: 0, y: 180, width: header.frame.width, height: 25)
+        title.frame = CGRect.init(x: 0, y: 158, width: header.frame.width, height: 25)
         title.text = album?.albumTitle
         title.font = UIFont.systemFont(ofSize: 16)
         title.textColor = UIColor.black
@@ -86,12 +88,22 @@ class AlbumInfoTableViewController: UITableViewController {
     
     private func createAlbumArtistLabel(header: UIView) -> UILabel {
         let artist = UILabel()
-        artist.frame = CGRect.init(x: 0, y: 205, width: header.frame.width, height: 25)
+        artist.frame = CGRect.init(x: 0, y: 183, width: header.frame.width, height: 25)
         artist.text = album?.albumArtist
         artist.font = UIFont.systemFont(ofSize: 16)
         artist.textColor = UIColor.black
         artist.textAlignment = .center
         return artist
+    }
+    
+    private func createAlbumGenreLabel(header: UIView) -> UILabel {
+        let genre = UILabel()
+        genre.frame = CGRect.init(x: 0, y: 208, width: header.frame.width, height: 25)
+        genre.text = "Sample Genre" //will pull this info from new api call
+        genre.font = UIFont.systemFont(ofSize: 16)
+        genre.textColor = UIColor.black
+        genre.textAlignment = .center
+        return genre
     }
 
 }
