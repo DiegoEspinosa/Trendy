@@ -81,7 +81,7 @@ class AlbumCollectionViewController: UICollectionViewController {
     
     private func createAlbumObjects(albumJsonArray: [AlbumData]) {
         for album in albumJsonArray.reversed() {
-            let albumObject = Album(rank: album.intChartPlace, title: album.strAlbum, artist: album.strArtist, imageUrl: album.strAlbumThumb)
+            let albumObject = Album(rank: album.intChartPlace, title: album.strAlbum, artist: album.strArtist, id: album.idAlbum, imageUrl: album.strAlbumThumb)
             albumArray.append(albumObject)
         }
         collectionView.reloadData()

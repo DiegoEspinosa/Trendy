@@ -10,10 +10,8 @@ import UIKit
 
 class AlbumInfoTableViewController: UITableViewController {
     
-    private let API_KEY = 195003
-    private let albumInfoString = "https://theaudiodb.com/api/v1/json/{APIKEY}/album.php?m={albumid}"
-    private let albumTracksString = "https://theaudiodb.com/api/v1/json/{APIKEY}/track.php?m={albumid}"
-
+    private var albumInfoString = "https://theaudiodb.com/api/v1/json/195003/album.php?m="
+    private var albumTracksString = "https://theaudiodb.com/api/v1/json/195003/track.php?m="
     
     var album : Album?
 
@@ -22,6 +20,10 @@ class AlbumInfoTableViewController: UITableViewController {
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
+        if let album = album {
+            albumInfoString.append(album.albumID)
+            albumTracksString.append(album.albumID)
+        }
     }
 
     // MARK: - Table view data source
@@ -76,6 +78,10 @@ class AlbumInfoTableViewController: UITableViewController {
     */
     
     //MARK: - Private Functions
+    private func fetchAlbumInfo() {
+        
+    }
+    
     private func createAlbumTitleLabel(header: UIView) -> UILabel {
         let title = UILabel()
         title.frame = CGRect.init(x: 0, y: 158, width: header.frame.width, height: 25)
@@ -99,7 +105,7 @@ class AlbumInfoTableViewController: UITableViewController {
     private func createAlbumGenreLabel(header: UIView) -> UILabel {
         let genre = UILabel()
         genre.frame = CGRect.init(x: 0, y: 208, width: header.frame.width, height: 25)
-        genre.text = "Sample Genre" //will pull this info from new api call
+        genre.text = "sameple text" //will pull this info from new api call
         genre.font = UIFont.systemFont(ofSize: 16)
         genre.textColor = UIColor.black
         genre.textAlignment = .center

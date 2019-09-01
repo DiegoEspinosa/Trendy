@@ -14,13 +14,15 @@ class Album {
     public var albumTitle : String = ""
     public var albumArtist : String = ""
     public var albumImageUrl : String = ""
+    public var albumID : String = ""
     
     
-    init(rank: String, title: String, artist: String, imageUrl: String) {
+    init(rank: String, title: String, artist: String, id: String, imageUrl: String) {
         albumRank = Int(rank)!
         albumTitle = title
         albumArtist = artist
         albumImageUrl = imageUrl
+        albumID = id
     }
 }
 
@@ -33,4 +35,5 @@ struct AlbumData: Decodable {
     var strAlbum : String
     var strArtist : String
     var strAlbumThumb : String
+    var idAlbum : String
 }
