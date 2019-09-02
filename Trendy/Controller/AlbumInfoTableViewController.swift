@@ -42,25 +42,8 @@ class AlbumInfoTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = UIView.init(frame: CGRect.init(x: 0, y: 0, width: Int(tableView.frame.width), height: 400))
-        
-        let imageView = UIImageView.init(frame: CGRect.init(x: (header.frame.width / 2) - 75, y: 8, width: 150 , height: 150))
-        imageView.downloaded(from: (album?.albumImageUrl)!)
-        
-        let titleLabel = createAlbumTitleLabel(header: header)
-        let artistLabel = createAlbumArtistLabel(header: header)
-        let genreLabel = createAlbumGenreLabel(header: header)
-        let descLabel = createAlbumDescLabel(header: header)
-        
-        header.addSubview(imageView)
-        header.addSubview(titleLabel)
-        header.addSubview(artistLabel)
-        header.addSubview(genreLabel)
-        header.addSubview(descLabel)
-        
-        header.clipsToBounds = true
+        let header = createHeaderSection()
         return header
-        
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -130,7 +113,6 @@ class AlbumInfoTableViewController: UITableViewController {
             if response.result.isSuccess {
                 let jsonData = response.data
                 do {
-                    print(response.result.value)
                     let jsonDecoder = JSONDecoder()
                     let tracks = try jsonDecoder.decode(Tracks.self, from: jsonData!)
                     let tracksArray = tracks.track
@@ -143,6 +125,27 @@ class AlbumInfoTableViewController: UITableViewController {
                 print("Error retrieving data")
             }
         }
+    }
+    
+    private func createHeaderSection() -> UIView {
+        let header = UIView.init(frame: CGRect.init(x: 0, y: 0, width: Int(tableView.frame.width), height: 400))
+        
+        let imageView = UIImageView.init(frame: CGRect.init(x: (header.frame.width / 2) - 75, y: 8, width: 150 , height: 150))
+        imageView.downloaded(from: (album?.albumImageUrl)!)
+        
+        let titleLabel = createAlbumTitleLabel(header: header)
+        let artistLabel = createAlbumArtistLabel(header: header)
+        let genreLabel = createAlbumGenreLabel(header: header)
+        let descLabel = createAlbumDescLabel(header: header)
+        
+        header.addSubview(imageView)
+        header.addSubview(titleLabel)
+        header.addSubview(artistLabel)
+        header.addSubview(genreLabel)
+        header.addSubview(descLabel)
+        
+        header.clipsToBounds = true
+        return header
     }
     
     private func createAlbumTitleLabel(header: UIView) -> UILabel {
