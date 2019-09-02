@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class AlbumInfoTableViewController: UITableViewController {
     
@@ -78,8 +79,14 @@ class AlbumInfoTableViewController: UITableViewController {
     */
     
     //MARK: - Private Functions
-    private func fetchAlbumInfo() {
-        
+    private func fetchAlbumInfo(from url: URL) {
+        Alamofire.request(url, method: .get).responseJSON { (response) in
+            if response.result.isSuccess {
+                let jsonData = response.data
+            } else {
+                //action if result fails
+            }
+        }
     }
     
     private func createAlbumTitleLabel(header: UIView) -> UILabel {
