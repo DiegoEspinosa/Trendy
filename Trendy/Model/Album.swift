@@ -15,6 +15,8 @@ class Album {
     public var albumArtist : String = ""
     public var albumImageUrl : String = ""
     public var albumID : String = ""
+    public var albumGenre : String = ""
+    public var albumDescription : String = ""
     
     
     init(rank: String, title: String, artist: String, id: String, imageUrl: String) {

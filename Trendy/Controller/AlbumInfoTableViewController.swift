@@ -16,9 +16,6 @@ class AlbumInfoTableViewController: UITableViewController {
     
     var album : Album?
     var albumTracks : Array<TrackObject> = []
-    
-    var albumGenre : String = ""
-    var albumDescription : String = ""
 
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
@@ -99,8 +96,8 @@ class AlbumInfoTableViewController: UITableViewController {
         
         let albumInfoUrl = URL(string: albumInfoString)
         fetchAlbumInfo(from: albumInfoUrl!) { (albumInfoArray, error) in
-            self.albumGenre = albumInfoArray?[0].strGenre ?? "Unable to find a genre for the album"
-            self.albumDescription = albumInfoArray?[0].strDescriptionEN ?? "Unable to find a description for the album"
+            self.album?.albumGenre = albumInfoArray?[0].strGenre ?? "Unable to find a genre for the album"
+            self.album?.albumDescription = albumInfoArray?[0].strDescriptionEN ?? "Unable to find a description for the album"
             self.tableView.reloadData()
         }
         
@@ -184,7 +181,7 @@ class AlbumInfoTableViewController: UITableViewController {
     private func createAlbumGenreLabel(header: UIView) -> UILabel {
         let genre = UILabel()
         genre.frame = CGRect.init(x: 0, y: 208, width: header.frame.width, height: 25)
-        genre.text = albumGenre
+        genre.text = album?.albumGenre
         genre.font = UIFont.systemFont(ofSize: 14)
         genre.textColor = UIColor.black
         genre.textAlignment = .center
@@ -194,7 +191,7 @@ class AlbumInfoTableViewController: UITableViewController {
     private func createAlbumDescLabel(header: UIView) -> UILabel {
         let description = UILabel()
         description.frame = CGRect.init(x: 5, y: 233, width: header.frame.width - 25, height: 150)
-        description.text = albumDescription
+        description.text = album?.albumDescription
         description.font = UIFont.systemFont(ofSize: 14)
         description.textColor = UIColor.black
         description.textAlignment = .center
