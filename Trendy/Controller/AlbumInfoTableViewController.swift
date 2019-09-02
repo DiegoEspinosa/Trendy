@@ -33,8 +33,8 @@ class AlbumInfoTableViewController: UITableViewController {
             
             let albumInfoUrl = URL(string: albumInfoString)
             fetchAlbumInfo(from: albumInfoUrl!) { (albumInfoArray, error) in
-                self.albumGenre = albumInfoArray?[0].strGenre ?? ""
-                self.albumDescription = albumInfoArray?[0].strDescriptionEN ?? ""
+                self.albumGenre = albumInfoArray?[0].strGenre ?? "Unable to find a genre for the album"
+                self.albumDescription = albumInfoArray?[0].strDescriptionEN ?? "Unable to find a description for the album"
                 self.tableView.reloadData()
             }
         }
