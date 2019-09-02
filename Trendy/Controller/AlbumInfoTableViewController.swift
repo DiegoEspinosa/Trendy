@@ -27,6 +27,7 @@ class AlbumInfoTableViewController: UITableViewController {
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
+        tableView.separatorStyle = .none
         if let currentAlbum = album {
             albumInfoString.append(currentAlbum.albumID)
             albumTracksString.append(currentAlbum.albumID)
@@ -72,9 +73,11 @@ class AlbumInfoTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "albumInfoCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "albumInfoCell", for: indexPath) as! AlbumInfoTableViewCell
 
         // Configure the cell...
+        cell.trackNumberLabel.text = albumTracks[indexPath.row].trackName
+        cell.trackTitleLabel.text = String(albumTracks[indexPath.row].trackNum)
 
         return cell
     }
@@ -107,12 +110,16 @@ class AlbumInfoTableViewController: UITableViewController {
                 for track in tracks {
                     let track = TrackObject(name: track.strTrack, number: track.intTrackNumber)
                     self.albumTracks.append(track)
+                    self.albumTracks.sort(by: { (trackOne, trackTwo) -> Bool in
+                        trackOne.trackNum < trackTwo.trackNum
+                    })
+                    
                 }
+                self.tableView.reloadData()
+                self.activityIndicator.isHidden = true
+                self.activityIndicator.stopAnimating()
             }
         }
-        
-        activityIndicator.isHidden = true
-        activityIndicator.stopAnimating()
     }
     
     private func fetchAlbumInfo(from url: URL, albumInfoCompletionHandler: @escaping ([AlbumInfo]?, Error?) -> Void) {
@@ -139,9 +146,10 @@ class AlbumInfoTableViewController: UITableViewController {
             if response.result.isSuccess {
                 let jsonData = response.data
                 do {
+                    print(response.result.value)
                     let jsonDecoder = JSONDecoder()
                     let tracks = try jsonDecoder.decode(Tracks.self, from: jsonData!)
-                    let tracksArray = tracks.tracks
+                    let tracksArray = tracks.track
                     albumTracksCompletionHandler(tracksArray, nil)
                 } catch {
                     print("Error decoding data")

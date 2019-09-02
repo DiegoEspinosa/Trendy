@@ -10,6 +10,8 @@ import UIKit
 
 class AlbumInfoTableViewCell: UITableViewCell {
 
+    @IBOutlet weak var trackNumberLabel: UILabel!
+    @IBOutlet weak var trackTitleLabel: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code

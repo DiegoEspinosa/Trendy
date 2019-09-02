@@ -19,7 +19,7 @@ class TrackObject {
 }
 
 struct Tracks: Decodable {
-    var tracks : [Track]
+    var track : [Track]
 }
 
 struct Track: Decodable {
