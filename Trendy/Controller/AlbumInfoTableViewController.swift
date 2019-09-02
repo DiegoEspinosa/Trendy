@@ -21,10 +21,9 @@ class AlbumInfoTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
+        
         tableView.separatorStyle = .none
+        
         if let currentAlbum = album {
             albumInfoString.append(currentAlbum.albumID)
             albumTracksString.append(currentAlbum.albumID)
@@ -32,7 +31,6 @@ class AlbumInfoTableViewController: UITableViewController {
             loadInAllData()
         }
     }
-    
 
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -72,25 +70,14 @@ class AlbumInfoTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "albumInfoCell", for: indexPath) as! AlbumInfoTableViewCell
 
-        // Configure the cell...
         cell.trackNumberLabel.text = albumTracks[indexPath.row].trackName
         cell.trackTitleLabel.text = String(albumTracks[indexPath.row].trackNum)
 
         return cell
     }
-    /*
-    // MARK: - Navigation
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
     
     //MARK: - Private Functions
     private func loadInAllData() {
-        //will hold the start and stop animation of the activity indicator
-        //will hold both api fetch functions (album info and tracks)
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
         
