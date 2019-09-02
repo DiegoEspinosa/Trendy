@@ -15,6 +15,7 @@ class AlbumInfoTableViewController: UITableViewController {
     private var albumTracksString = "https://theaudiodb.com/api/v1/json/195003/track.php?m="
     
     var album : Album?
+    var albumTracks : Array<TrackObject> = []
     
     var albumGenre : String = ""
     var albumDescription : String = ""
@@ -37,13 +38,11 @@ class AlbumInfoTableViewController: UITableViewController {
 
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
-        return 10
+        return albumTracks.count
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -102,6 +101,16 @@ class AlbumInfoTableViewController: UITableViewController {
             self.tableView.reloadData()
         }
         
+        let albumTracksUrl = URL(string: albumTracksString)
+        fetchAlbumTracks(from: albumTracksUrl!) { (trackArray, error) in
+            if let tracks = trackArray {
+                for track in tracks {
+                    let track = TrackObject(name: track.strTrack, number: track.intTrackNumber)
+                    self.albumTracks.append(track)
+                }
+            }
+        }
+        
         activityIndicator.isHidden = true
         activityIndicator.stopAnimating()
     }
@@ -118,6 +127,25 @@ class AlbumInfoTableViewController: UITableViewController {
                 } catch {
                     print("Error decoding data")
                     albumInfoCompletionHandler(nil, response.error)
+                }
+            } else {
+                print("Error retrieving data")
+            }
+        }
+    }
+    
+    private func fetchAlbumTracks(from url: URL, albumTracksCompletionHandler: @escaping ([Track]?, Error?) -> Void) {
+        Alamofire.request(url, method: .get).responseJSON { (response) in
+            if response.result.isSuccess {
+                let jsonData = response.data
+                do {
+                    let jsonDecoder = JSONDecoder()
+                    let tracks = try jsonDecoder.decode(Tracks.self, from: jsonData!)
+                    let tracksArray = tracks.tracks
+                    albumTracksCompletionHandler(tracksArray, nil)
+                } catch {
+                    print("Error decoding data")
+                    albumTracksCompletionHandler(nil, response.error)
                 }
             } else {
                 print("Error retrieving data")
