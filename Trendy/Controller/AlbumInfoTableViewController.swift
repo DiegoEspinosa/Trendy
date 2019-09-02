@@ -21,11 +21,13 @@ class AlbumInfoTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let infoButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(seeAlbumInfo))
+        self.navigationItem.rightBarButtonItem = infoButton
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
         if let currentAlbum = album {
-            print("AlbumID: \(currentAlbum.albumID)")
             albumInfoString.append(currentAlbum.albumID)
             albumTracksString.append(currentAlbum.albumID)
             
@@ -36,6 +38,11 @@ class AlbumInfoTableViewController: UITableViewController {
                 self.tableView.reloadData()
             }
         }
+    }
+    
+    @objc func seeAlbumInfo() {
+        //present modal with album info
+        print("Present album info modal")
     }
 
     // MARK: - Table view data source
@@ -132,8 +139,8 @@ class AlbumInfoTableViewController: UITableViewController {
     private func createAlbumGenreLabel(header: UIView) -> UILabel {
         let genre = UILabel()
         genre.frame = CGRect.init(x: 0, y: 208, width: header.frame.width, height: 25)
-        genre.text = albumGenre //will pull this info from new api call
-        genre.font = UIFont.systemFont(ofSize: 16)
+        genre.text = albumGenre
+        genre.font = UIFont.systemFont(ofSize: 14)
         genre.textColor = UIColor.black
         genre.textAlignment = .center
         return genre
