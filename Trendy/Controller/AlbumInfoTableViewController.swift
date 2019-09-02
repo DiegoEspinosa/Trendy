@@ -15,15 +15,26 @@ class AlbumInfoTableViewController: UITableViewController {
     private var albumTracksString = "https://theaudiodb.com/api/v1/json/195003/track.php?m="
     
     var album : Album?
+    
+    var albumGenre : String = ""
+    var albumDescription : String = ""
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
-        if let album = album {
-            albumInfoString.append(album.albumID)
-            albumTracksString.append(album.albumID)
+        if let currentAlbum = album {
+            print("AlbumID: \(currentAlbum.albumID)")
+            albumInfoString.append(currentAlbum.albumID)
+            albumTracksString.append(currentAlbum.albumID)
+            
+            let albumInfoUrl = URL(string: albumInfoString)
+            fetchAlbumInfo(from: albumInfoUrl!) { (albumInfoArray, error) in
+                self.albumGenre = albumInfoArray?[0].strGenre ?? ""
+                self.albumDescription = albumInfoArray?[0].strDescriptionEN ?? ""
+                self.tableView.reloadData()
+            }
         }
     }
 
@@ -79,12 +90,21 @@ class AlbumInfoTableViewController: UITableViewController {
     */
     
     //MARK: - Private Functions
-    private func fetchAlbumInfo(from url: URL) {
+    private func fetchAlbumInfo(from url: URL, albumInfoCompletionHandler: @escaping ([AlbumInfo]?, Error?) -> Void) {
         Alamofire.request(url, method: .get).responseJSON { (response) in
             if response.result.isSuccess {
                 let jsonData = response.data
+                do {
+                    let jsonDecoder = JSONDecoder()
+                    let mainAlbum = try jsonDecoder.decode(Main.self, from: jsonData!)
+                    let albumInfo = mainAlbum.album
+                    albumInfoCompletionHandler(albumInfo, nil)
+                } catch {
+                    print("Error decoding data")
+                    albumInfoCompletionHandler(nil, response.error)
+                }
             } else {
-                //action if result fails
+                print("Error retrieving data")
             }
         }
     }
@@ -112,7 +132,7 @@ class AlbumInfoTableViewController: UITableViewController {
     private func createAlbumGenreLabel(header: UIView) -> UILabel {
         let genre = UILabel()
         genre.frame = CGRect.init(x: 0, y: 208, width: header.frame.width, height: 25)
-        genre.text = "sameple text" //will pull this info from new api call
+        genre.text = albumGenre //will pull this info from new api call
         genre.font = UIFont.systemFont(ofSize: 16)
         genre.textColor = UIColor.black
         genre.textAlignment = .center
