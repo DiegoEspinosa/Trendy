@@ -21,9 +21,6 @@ class AlbumInfoTableViewController: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        let infoButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(seeAlbumInfo))
-        self.navigationItem.rightBarButtonItem = infoButton
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -40,10 +37,6 @@ class AlbumInfoTableViewController: UITableViewController {
         }
     }
     
-    @objc func seeAlbumInfo() {
-        //present modal with album info
-        print("Present album info modal")
-    }
 
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -57,7 +50,7 @@ class AlbumInfoTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = UIView.init(frame: CGRect.init(x: 0, y: 0, width: Int(tableView.frame.width), height: 250))
+        let header = UIView.init(frame: CGRect.init(x: 0, y: 0, width: Int(tableView.frame.width), height: 400))
         
         let imageView = UIImageView.init(frame: CGRect.init(x: (header.frame.width / 2) - 75, y: 8, width: 150 , height: 150))
         imageView.downloaded(from: (album?.albumImageUrl)!)
@@ -65,11 +58,13 @@ class AlbumInfoTableViewController: UITableViewController {
         let titleLabel = createAlbumTitleLabel(header: header)
         let artistLabel = createAlbumArtistLabel(header: header)
         let genreLabel = createAlbumGenreLabel(header: header)
+        let descLabel = createAlbumDescLabel(header: header)
         
         header.addSubview(imageView)
         header.addSubview(titleLabel)
         header.addSubview(artistLabel)
         header.addSubview(genreLabel)
+        header.addSubview(descLabel)
         
         header.clipsToBounds = true
         return header
@@ -77,7 +72,7 @@ class AlbumInfoTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return CGFloat(250)
+        return CGFloat(400)
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -144,6 +139,18 @@ class AlbumInfoTableViewController: UITableViewController {
         genre.textColor = UIColor.black
         genre.textAlignment = .center
         return genre
+    }
+    
+    private func createAlbumDescLabel(header: UIView) -> UILabel {
+        let description = UILabel()
+        description.frame = CGRect.init(x: 5, y: 233, width: header.frame.width - 25, height: 150)
+        description.text = albumDescription
+        description.font = UIFont.systemFont(ofSize: 14)
+        description.textColor = UIColor.black
+        description.textAlignment = .center
+        description.lineBreakMode = .byWordWrapping
+        description.numberOfLines = 100
+        return description
     }
 
 }
