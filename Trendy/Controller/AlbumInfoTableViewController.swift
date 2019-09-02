@@ -30,12 +30,7 @@ class AlbumInfoTableViewController: UITableViewController {
             albumInfoString.append(currentAlbum.albumID)
             albumTracksString.append(currentAlbum.albumID)
             
-            let albumInfoUrl = URL(string: albumInfoString)
-            fetchAlbumInfo(from: albumInfoUrl!) { (albumInfoArray, error) in
-                self.albumGenre = albumInfoArray?[0].strGenre ?? "Unable to find a genre for the album"
-                self.albumDescription = albumInfoArray?[0].strDescriptionEN ?? "Unable to find a description for the album"
-                self.tableView.reloadData()
-            }
+            loadInAllData()
         }
     }
     
@@ -97,6 +92,18 @@ class AlbumInfoTableViewController: UITableViewController {
     private func loadInAllData() {
         //will hold the start and stop animation of the activity indicator
         //will hold both api fetch functions (album info and tracks)
+        activityIndicator.isHidden = false
+        activityIndicator.startAnimating()
+        
+        let albumInfoUrl = URL(string: albumInfoString)
+        fetchAlbumInfo(from: albumInfoUrl!) { (albumInfoArray, error) in
+            self.albumGenre = albumInfoArray?[0].strGenre ?? "Unable to find a genre for the album"
+            self.albumDescription = albumInfoArray?[0].strDescriptionEN ?? "Unable to find a description for the album"
+            self.tableView.reloadData()
+        }
+        
+        activityIndicator.isHidden = true
+        activityIndicator.stopAnimating()
     }
     
     private func fetchAlbumInfo(from url: URL, albumInfoCompletionHandler: @escaping ([AlbumInfo]?, Error?) -> Void) {
