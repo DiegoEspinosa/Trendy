@@ -140,8 +140,8 @@
                                     </subviews>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <outlet property="trackNumberLabel" destination="CVA-5M-0fp" id="DVR-td-GtA"/>
-                                    <outlet property="trackTitleLabel" destination="2Gv-Xr-6mF" id="kUd-PN-MOP"/>
+                                    <outlet property="trackNumberLabel" destination="2Gv-Xr-6mF" id="K5w-Yx-WfY"/>
+                                    <outlet property="trackTitleLabel" destination="CVA-5M-0fp" id="Vov-Js-EFA"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>

@@ -53,8 +53,8 @@ class AlbumInfoTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "albumInfoCell", for: indexPath) as! AlbumInfoTableViewCell
 
-        cell.trackNumberLabel.text = albumTracks[indexPath.row].trackName
-        cell.trackTitleLabel.text = String(albumTracks[indexPath.row].trackNum)
+        cell.trackNumberLabel.text = String(albumTracks[indexPath.row].trackNum) + "."
+        cell.trackTitleLabel.text = albumTracks[indexPath.row].trackName
 
         return cell
     }
