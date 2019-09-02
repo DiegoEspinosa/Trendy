@@ -94,6 +94,11 @@ class AlbumInfoTableViewController: UITableViewController {
     */
     
     //MARK: - Private Functions
+    private func loadInAllData() {
+        //will hold the start and stop animation of the activity indicator
+        //will hold both api fetch functions (album info and tracks)
+    }
+    
     private func fetchAlbumInfo(from url: URL, albumInfoCompletionHandler: @escaping ([AlbumInfo]?, Error?) -> Void) {
         Alamofire.request(url, method: .get).responseJSON { (response) in
             if response.result.isSuccess {
