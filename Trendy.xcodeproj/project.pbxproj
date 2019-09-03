@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		C522DB4D2311BB2C00284B1D /* Album.swift in Sources */ = {isa = PBXBuildFile; fileRef = C522DB4C2311BB2C00284B1D /* Album.swift */; };
+		C522DB4F23181F6500284B1D /* AlbumInfoTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C522DB4E23181F6500284B1D /* AlbumInfoTableViewController.swift */; };
+		C522DB512318201B00284B1D /* AlbumInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C522DB502318201B00284B1D /* AlbumInfoTableViewCell.swift */; };
+		C522DB55231D8E8E00284B1D /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = C522DB54231D8E8E00284B1D /* Track.swift */; };
 		C522DB532319A8E900284B1D /* UIImageView+DownloadImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C522DB522319A8E900284B1D /* UIImageView+DownloadImage.swift */; };
 		C5FDE445230EE0ED00C8D71E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FDE444230EE0ED00C8D71E /* AppDelegate.swift */; };
 		C5FDE44A230EE0ED00C8D71E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5FDE448230EE0ED00C8D71E /* Main.storyboard */; };
@@ -23,6 +26,9 @@
 		4AE1D8777FEFCF04AA6EBD7A /* Pods_Trendy.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Trendy.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		AAE002801355201AA8BA342F /* Pods-Trendy.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Trendy.debug.xcconfig"; path = "Target Support Files/Pods-Trendy/Pods-Trendy.debug.xcconfig"; sourceTree = "<group>"; };
 		C522DB4C2311BB2C00284B1D /* Album.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Album.swift; sourceTree = "<group>"; };
+		C522DB4E23181F6500284B1D /* AlbumInfoTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumInfoTableViewController.swift; sourceTree = "<group>"; };
+		C522DB502318201B00284B1D /* AlbumInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumInfoTableViewCell.swift; sourceTree = "<group>"; };
+		C522DB54231D8E8E00284B1D /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
 		C522DB522319A8E900284B1D /* UIImageView+DownloadImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+DownloadImage.swift"; sourceTree = "<group>"; };
 		C5FDE441230EE0ED00C8D71E /* Trendy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Trendy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5FDE444230EE0ED00C8D71E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -107,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				C522DB4C2311BB2C00284B1D /* Album.swift */,
+				C522DB54231D8E8E00284B1D /* Track.swift */,
 				C522DB522319A8E900284B1D /* UIImageView+DownloadImage.swift */,
 			);
 			path = Model;
@@ -117,6 +124,8 @@
 			children = (
 				C5FDE459230EF15400C8D71E /* AlbumCollectionViewController.swift */,
 				C5FDE45B230EF3D300C8D71E /* AlbumCollectionViewCell.swift */,
+				C522DB4E23181F6500284B1D /* AlbumInfoTableViewController.swift */,
+				C522DB502318201B00284B1D /* AlbumInfoTableViewCell.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -241,11 +250,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C522DB4F23181F6500284B1D /* AlbumInfoTableViewController.swift in Sources */,
 				C522DB532319A8E900284B1D /* UIImageView+DownloadImage.swift in Sources */,
 				C5FDE45C230EF3D300C8D71E /* AlbumCollectionViewCell.swift in Sources */,
 				C5FDE45A230EF15400C8D71E /* AlbumCollectionViewController.swift in Sources */,
 				C5FDE445230EE0ED00C8D71E /* AppDelegate.swift in Sources */,
 				C522DB4D2311BB2C00284B1D /* Album.swift in Sources */,
+				C522DB512318201B00284B1D /* AlbumInfoTableViewCell.swift in Sources */,
+				C522DB55231D8E8E00284B1D /* Track.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

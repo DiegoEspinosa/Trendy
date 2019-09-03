@@ -14,16 +14,21 @@ class Album {
     public var albumTitle : String = ""
     public var albumArtist : String = ""
     public var albumImageUrl : String = ""
+    public var albumID : String = ""
+    public var albumGenre : String = ""
+    public var albumDescription : String = ""
     
     
-    init(rank: String, title: String, artist: String, imageUrl: String) {
+    init(rank: String, title: String, artist: String, id: String, imageUrl: String) {
         albumRank = Int(rank)!
         albumTitle = title
         albumArtist = artist
         albumImageUrl = imageUrl
+        albumID = id
     }
 }
 
+//Main API Call
 struct Root: Decodable {
     let trending : [AlbumData]
 }
@@ -33,4 +38,15 @@ struct AlbumData: Decodable {
     var strAlbum : String
     var strArtist : String
     var strAlbumThumb : String
+    var idAlbum : String
+}
+
+//Secondary API Call
+struct Main: Decodable {
+    let album : [AlbumInfo]
+}
+
+struct AlbumInfo : Decodable {
+    var strGenre : String
+    var strDescriptionEN : String
 }

@@ -44,6 +44,17 @@ class AlbumCollectionViewController: UICollectionViewController {
         return cell
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.destination is AlbumInfoTableViewController {
+            guard let albumInfoTableVC = segue.destination as? AlbumInfoTableViewController else {fatalError("Error setting table view controller")}
+            guard let selectedCell = sender as? AlbumCollectionViewCell else {fatalError("Error setting cell")}
+            guard let indexPath = collectionView.indexPath(for: selectedCell) else {fatalError("Error getting indexPath")}
+            
+            let selectedAlbum = albumArray[indexPath.row]
+            albumInfoTableVC.album = selectedAlbum
+        }
+    }
+
     private func loadAllAlbums(from url: URL) {
         activityIndicatorView.isHidden = false
         activityIndicatorView.startAnimating()
@@ -81,9 +92,10 @@ class AlbumCollectionViewController: UICollectionViewController {
     
     private func createAlbumObjects(albumJsonArray: [AlbumData]) {
         for album in albumJsonArray.reversed() {
-            let albumObject = Album(rank: album.intChartPlace, title: album.strAlbum, artist: album.strArtist, imageUrl: album.strAlbumThumb)
+            let albumObject = Album(rank: album.intChartPlace, title: album.strAlbum, artist: album.strArtist, id: album.idAlbum, imageUrl: album.strAlbumThumb)
             albumArray.append(albumObject)
         }
         collectionView.reloadData()
     }
 }
+

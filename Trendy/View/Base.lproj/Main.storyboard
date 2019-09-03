@@ -85,6 +85,7 @@
                                     <outlet property="albumArtistLabel" destination="cuU-HG-Lwp" id="TkH-Dr-TJy"/>
                                     <outlet property="albumRankLabel" destination="ssb-0W-n4i" id="g9q-I2-ige"/>
                                     <outlet property="albumTitleLabel" destination="uku-0P-Zkb" id="2pK-hq-Y9c"/>
+                                    <segue destination="ziG-D0-53S" kind="show" identifier="toAlbumInfo" id="D2J-bS-kEX"/>
                                 </connections>
                             </collectionViewCell>
                         </cells>
@@ -101,6 +102,61 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="fWJ-78-XI3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="775" y="131"/>
+        </scene>
+        <!--Album Info Table View Controller-->
+        <scene sceneID="U3z-Zv-ZEw">
+            <objects>
+                <tableViewController id="ziG-D0-53S" customClass="AlbumInfoTableViewController" customModule="Trendy" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" id="qRz-JZ-Psa">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
+                        <activityIndicatorView key="tableFooterView" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" id="oha-gg-OXM">
+                            <rect key="frame" x="0.0" y="117.5" width="375" height="20"/>
+                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        </activityIndicatorView>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="albumInfoCell" id="KHU-qC-pQF" customClass="AlbumInfoTableViewCell" customModule="Trendy" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="55.5" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="KHU-qC-pQF" id="9Wy-tA-5c1">
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2Gv-Xr-6mF">
+                                            <rect key="frame" x="0.0" y="11" width="50" height="22"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CVA-5M-0fp">
+                                            <rect key="frame" x="51" y="11" width="324" height="22"/>
+                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
+                                    </subviews>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="trackNumberLabel" destination="2Gv-Xr-6mF" id="K5w-Yx-WfY"/>
+                                    <outlet property="trackTitleLabel" destination="CVA-5M-0fp" id="Vov-Js-EFA"/>
+                                </connections>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="ziG-D0-53S" id="Xea-UZ-iQC"/>
+                            <outlet property="delegate" destination="ziG-D0-53S" id="OPN-P4-3ke"/>
+                        </connections>
+                    </tableView>
+                    <connections>
+                        <outlet property="activityIndicator" destination="oha-gg-OXM" id="BSg-BA-Gc8"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Mrw-Kl-War" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1552.8" y="130.88455772113943"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="XL0-eQ-KGG">
