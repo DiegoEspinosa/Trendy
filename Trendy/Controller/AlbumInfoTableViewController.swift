@@ -131,7 +131,7 @@ class AlbumInfoTableViewController: UITableViewController {
         let header = UIView.init(frame: CGRect.init(x: 0, y: 0, width: Int(tableView.frame.width), height: 400))
         
         let imageView = UIImageView.init(frame: CGRect.init(x: (header.frame.width / 2) - 75, y: 8, width: 150 , height: 150))
-        imageView.downloaded(from: (album?.albumImageUrl)!)
+        imageView.downloadImage(from: (album?.albumImageUrl)!)
         
         let titleLabel = createAlbumTitleLabel(header: header)
         let artistLabel = createAlbumArtistLabel(header: header)
