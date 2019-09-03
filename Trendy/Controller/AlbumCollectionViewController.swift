@@ -48,14 +48,12 @@ class AlbumCollectionViewController: UICollectionViewController {
         activityIndicatorView.isHidden = false
         activityIndicatorView.startAnimating()
         
-        //let albumDataArray = fetchTrendingAlbums(from: url, albumDataCompletionHandler: (AlbumData?, Error?))
         fetchTrendingAlbums(from: url) { (album, error) in
             guard let albumDataArray = album else {fatalError("error setting album") }
             self.createAlbumObjects(albumJsonArray: albumDataArray)
+            self.activityIndicatorView.stopAnimating()
+            self.activityIndicatorView.isHidden = true
         }
-        
-        activityIndicatorView.stopAnimating()
-        activityIndicatorView.isHidden = true
     }
     
     //MARK: - Private functions
@@ -87,6 +85,5 @@ class AlbumCollectionViewController: UICollectionViewController {
             albumArray.append(albumObject)
         }
         collectionView.reloadData()
-        activityIndicatorView.stopAnimating()
     }
 }
