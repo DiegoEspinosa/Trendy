@@ -152,7 +152,7 @@ class AlbumInfoTableViewController: UITableViewController {
         let title = UILabel()
         title.frame = CGRect.init(x: 0, y: 158, width: header.frame.width, height: 25)
         title.text = album?.albumTitle
-        title.font = UIFont.systemFont(ofSize: 16)
+        title.font = UIFont.systemFont(ofSize: 18)
         title.textColor = UIColor.black
         title.textAlignment = .center
         return title
@@ -162,7 +162,7 @@ class AlbumInfoTableViewController: UITableViewController {
         let artist = UILabel()
         artist.frame = CGRect.init(x: 0, y: 183, width: header.frame.width, height: 25)
         artist.text = album?.albumArtist
-        artist.font = UIFont.systemFont(ofSize: 16)
+        artist.font = UIFont.systemFont(ofSize: 18)
         artist.textColor = UIColor.black
         artist.textAlignment = .center
         return artist
@@ -172,7 +172,7 @@ class AlbumInfoTableViewController: UITableViewController {
         let genre = UILabel()
         genre.frame = CGRect.init(x: 0, y: 208, width: header.frame.width, height: 25)
         genre.text = album?.albumGenre
-        genre.font = UIFont.systemFont(ofSize: 14)
+        genre.font = UIFont.systemFont(ofSize: 16)
         genre.textColor = UIColor.black
         genre.textAlignment = .center
         return genre
@@ -182,11 +182,11 @@ class AlbumInfoTableViewController: UITableViewController {
         let description = UILabel()
         description.frame = CGRect.init(x: 5, y: 233, width: header.frame.width - 25, height: 150)
         description.text = album?.albumDescription
-        description.font = UIFont.systemFont(ofSize: 14)
+        description.font = UIFont.systemFont(ofSize: 15)
         description.textColor = UIColor.black
         description.textAlignment = .center
-        description.lineBreakMode = .byWordWrapping
-        description.numberOfLines = 100
+        description.lineBreakMode = .byTruncatingTail
+        description.numberOfLines = 0
         return description
     }
 
