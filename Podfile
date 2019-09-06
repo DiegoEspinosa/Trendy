@@ -7,5 +7,7 @@ target 'Trendy' do
 
   # Pods for Trendy
   pod 'Alamofire'
+  pod "PromiseKit", "~> 6.8"
+  pod 'PromiseKit/Alamofire'
 
 end
