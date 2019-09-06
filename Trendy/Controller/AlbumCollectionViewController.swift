@@ -55,38 +55,16 @@ class AlbumCollectionViewController: UICollectionViewController {
         }
     }
 
+    //MARK: - Private functions
     private func loadAllAlbums(from url: URL) {
         activityIndicatorView.isHidden = false
         activityIndicatorView.startAnimating()
         
-        fetchTrendingAlbums(from: url) { (album, error) in
+        AlbumSingleton.shared.fetchTrending { (album, error) in
             guard let albumDataArray = album else {fatalError("error setting album") }
             self.createAlbumObjects(albumJsonArray: albumDataArray)
             self.activityIndicatorView.stopAnimating()
             self.activityIndicatorView.isHidden = true
-        }
-    }
-    
-    //MARK: - Private functions
-    private func fetchTrendingAlbums(from url: URL, albumDataCompletionHandler: @escaping ([AlbumData]?, Error?) -> Void){
-        Alamofire.request(url, method: .get).responseJSON { (response) in
-            if response.result.isSuccess {
-                let jsonData = response.data
-                do {
-                    let jsonDecoder = JSONDecoder()
-                    let root = try jsonDecoder.decode(Root.self, from: jsonData!)
-                    let albums = root.trending
-                    albumDataCompletionHandler(albums, nil)
-                } catch {
-                    print("Error: \(error)")
-                }
-            } else {
-                let alert = UIAlertController(title: "Something went wrong", message: "There was a problem retrieving data. Please try again", preferredStyle: .alert)
-                let action = UIAlertAction(title: "OK", style: .default, handler: nil)
-                alert.addAction(action)
-                self.present(alert, animated: true, completion: nil)
-                albumDataCompletionHandler(nil, response.error)
-            }
         }
     }
     

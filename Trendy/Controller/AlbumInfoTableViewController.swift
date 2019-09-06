@@ -11,9 +11,6 @@ import Alamofire
 
 class AlbumInfoTableViewController: UITableViewController {
     
-    private var albumInfoString = "https://theaudiodb.com/api/v1/json/195003/album.php?m="
-    private var albumTracksString = "https://theaudiodb.com/api/v1/json/195003/track.php?m="
-    
     var album : Album?
     var albumTracks : Array<TrackObject> = []
 
@@ -25,9 +22,7 @@ class AlbumInfoTableViewController: UITableViewController {
         tableView.separatorStyle = .none
         
         if let currentAlbum = album {
-            albumInfoString.append(currentAlbum.albumID)
-            albumTracksString.append(currentAlbum.albumID)
-            
+            //album exists
             loadInAllData()
         }
     }
@@ -65,25 +60,19 @@ class AlbumInfoTableViewController: UITableViewController {
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
         
-        let albumInfoUrl = URL(string: albumInfoString)
+        guard let id = album?.albumID else {fatalError("Error setting album ID")}
+        
         dispatchGroup.enter()
-        fetchAlbumInfo(from: albumInfoUrl!) { (albumInfoArray, error) in
-            self.album?.albumGenre = albumInfoArray?[0].strGenre ?? "Unable to find a genre for the album"
-            self.album?.albumDescription = albumInfoArray?[0].strDescriptionEN ?? "Unable to find a description for the album"
+        AlbumSingleton.shared.fetchInfo(albumId: id) { (albumInfoArray, error) in
+            self.album?.albumGenre = albumInfoArray?[0].strGenre ?? ""
+            self.album?.albumDescription = albumInfoArray?[0].strDescriptionEN ?? ""
             dispatchGroup.leave()
         }
         
-        let albumTracksUrl = URL(string: albumTracksString)
         dispatchGroup.enter()
-        fetchAlbumTracks(from: albumTracksUrl!) { (trackArray, error) in
+        AlbumSingleton.shared.fetchTracks(albumId: id) { (trackArray, error) in
             if let tracks = trackArray {
-                for track in tracks {
-                    let track = TrackObject(name: track.strTrack, number: track.intTrackNumber)
-                    self.albumTracks.append(track)
-                    self.albumTracks.sort(by: { (trackOne, trackTwo) -> Bool in
-                        trackOne.trackNum < trackTwo.trackNum
-                    })
-                }
+                self.createTrackObjects(tracks: tracks)
                 dispatchGroup.leave()
             }
         }
@@ -95,41 +84,13 @@ class AlbumInfoTableViewController: UITableViewController {
         }
     }
     
-    private func fetchAlbumInfo(from url: URL, albumInfoCompletionHandler: @escaping ([AlbumInfo]?, Error?) -> Void) {
-        Alamofire.request(url, method: .get).responseJSON { (response) in
-            if response.result.isSuccess {
-                let jsonData = response.data
-                do {
-                    let jsonDecoder = JSONDecoder()
-                    let mainAlbum = try jsonDecoder.decode(Main.self, from: jsonData!)
-                    let albumInfo = mainAlbum.album
-                    albumInfoCompletionHandler(albumInfo, nil)
-                } catch {
-                    print("Error decoding data")
-                    albumInfoCompletionHandler(nil, response.error)
-                }
-            } else {
-                print("Error retrieving data")
-            }
-        }
-    }
-    
-    private func fetchAlbumTracks(from url: URL, albumTracksCompletionHandler: @escaping ([Track]?, Error?) -> Void) {
-        Alamofire.request(url, method: .get).responseJSON { (response) in
-            if response.result.isSuccess {
-                let jsonData = response.data
-                do {
-                    let jsonDecoder = JSONDecoder()
-                    let tracks = try jsonDecoder.decode(Tracks.self, from: jsonData!)
-                    let tracksArray = tracks.track
-                    albumTracksCompletionHandler(tracksArray, nil)
-                } catch {
-                    print("Error decoding data")
-                    albumTracksCompletionHandler(nil, response.error)
-                }
-            } else {
-                print("Error retrieving data")
-            }
+    private func createTrackObjects(tracks: [Track]) {
+        for track in tracks {
+            let track = TrackObject(name: track.strTrack, number: track.intTrackNumber)
+            self.albumTracks.append(track)
+            self.albumTracks.sort(by: { (trackOne, trackTwo) -> Bool in
+                trackOne.trackNum < trackTwo.trackNum
+            })
         }
     }
     
