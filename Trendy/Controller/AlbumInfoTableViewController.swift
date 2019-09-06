@@ -9,7 +9,7 @@
 import UIKit
 import Alamofire
 
-class AlbumInfoTableViewController: UITableViewController {
+class AlbumInfoTableViewController: UITableViewController, SecondaryNetworkingRequests {
     
     private var albumInfoString = "https://theaudiodb.com/api/v1/json/195003/album.php?m="
     private var albumTracksString = "https://theaudiodb.com/api/v1/json/195003/track.php?m="
@@ -113,7 +113,7 @@ class AlbumInfoTableViewController: UITableViewController {
             }
         }
     }
-    
+
     private func fetchAlbumTracks(from url: URL, albumTracksCompletionHandler: @escaping ([Track]?, Error?) -> Void) {
         Alamofire.request(url, method: .get).responseJSON { (response) in
             if response.result.isSuccess {
