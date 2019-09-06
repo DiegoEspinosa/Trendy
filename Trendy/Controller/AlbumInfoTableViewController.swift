@@ -61,17 +61,20 @@ class AlbumInfoTableViewController: UITableViewController {
     
     //MARK: - Private Functions
     private func loadInAllData() {
+        let dispatchGroup = DispatchGroup()
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
         
         let albumInfoUrl = URL(string: albumInfoString)
+        dispatchGroup.enter()
         fetchAlbumInfo(from: albumInfoUrl!) { (albumInfoArray, error) in
             self.album?.albumGenre = albumInfoArray?[0].strGenre ?? "Unable to find a genre for the album"
             self.album?.albumDescription = albumInfoArray?[0].strDescriptionEN ?? "Unable to find a description for the album"
-            self.tableView.reloadData()
+            dispatchGroup.leave()
         }
         
         let albumTracksUrl = URL(string: albumTracksString)
+        dispatchGroup.enter()
         fetchAlbumTracks(from: albumTracksUrl!) { (trackArray, error) in
             if let tracks = trackArray {
                 for track in tracks {
@@ -80,12 +83,15 @@ class AlbumInfoTableViewController: UITableViewController {
                     self.albumTracks.sort(by: { (trackOne, trackTwo) -> Bool in
                         trackOne.trackNum < trackTwo.trackNum
                     })
-                    
                 }
-                self.tableView.reloadData()
-                self.activityIndicator.isHidden = true
-                self.activityIndicator.stopAnimating()
+                dispatchGroup.leave()
             }
+        }
+        
+        dispatchGroup.notify(queue: .main) {
+            self.activityIndicator.isHidden = true
+            self.activityIndicator.stopAnimating()
+            self.tableView.reloadData()
         }
     }
     
