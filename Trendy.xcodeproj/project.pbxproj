@@ -12,7 +12,7 @@
 		C522DB512318201B00284B1D /* AlbumInfoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = C522DB502318201B00284B1D /* AlbumInfoTableViewCell.swift */; };
 		C522DB532319A8E900284B1D /* UIImageView+DownloadImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = C522DB522319A8E900284B1D /* UIImageView+DownloadImage.swift */; };
 		C522DB55231D8E8E00284B1D /* Track.swift in Sources */ = {isa = PBXBuildFile; fileRef = C522DB54231D8E8E00284B1D /* Track.swift */; };
-		C5CF049F2322127B0058262D /* NetworkingRequests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CF049E2322127B0058262D /* NetworkingRequests.swift */; };
+		C5CF049F2322127B0058262D /* AlbumSingleton.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5CF049E2322127B0058262D /* AlbumSingleton.swift */; };
 		C5FDE445230EE0ED00C8D71E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5FDE444230EE0ED00C8D71E /* AppDelegate.swift */; };
 		C5FDE44A230EE0ED00C8D71E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = C5FDE448230EE0ED00C8D71E /* Main.storyboard */; };
 		C5FDE44C230EE0EF00C8D71E /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = C5FDE44B230EE0EF00C8D71E /* Assets.xcassets */; };
@@ -31,7 +31,7 @@
 		C522DB502318201B00284B1D /* AlbumInfoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumInfoTableViewCell.swift; sourceTree = "<group>"; };
 		C522DB522319A8E900284B1D /* UIImageView+DownloadImage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImageView+DownloadImage.swift"; sourceTree = "<group>"; };
 		C522DB54231D8E8E00284B1D /* Track.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Track.swift; sourceTree = "<group>"; };
-		C5CF049E2322127B0058262D /* NetworkingRequests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkingRequests.swift; sourceTree = "<group>"; };
+		C5CF049E2322127B0058262D /* AlbumSingleton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlbumSingleton.swift; sourceTree = "<group>"; };
 		C5FDE441230EE0ED00C8D71E /* Trendy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Trendy.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C5FDE444230EE0ED00C8D71E /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C5FDE449230EE0ED00C8D71E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -74,7 +74,7 @@
 		C5CF049D232212400058262D /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				C5CF049E2322127B0058262D /* NetworkingRequests.swift */,
+				C5CF049E2322127B0058262D /* AlbumSingleton.swift */,
 			);
 			path = Services;
 			sourceTree = "<group>";
@@ -100,11 +100,11 @@
 		C5FDE443230EE0ED00C8D71E /* Trendy */ = {
 			isa = PBXGroup;
 			children = (
-				C5CF049D232212400058262D /* Services */,
 				C5FDE444230EE0ED00C8D71E /* AppDelegate.swift */,
 				C5FDE457230EE11100C8D71E /* Model */,
 				C5FDE456230EE10500C8D71E /* View */,
 				C5FDE458230EE11700C8D71E /* Controller */,
+				C5CF049D232212400058262D /* Services */,
 				C5FDE44B230EE0EF00C8D71E /* Assets.xcassets */,
 				C5FDE44D230EE0EF00C8D71E /* LaunchScreen.storyboard */,
 				C5FDE450230EE0EF00C8D71E /* Info.plist */,
@@ -266,7 +266,7 @@
 				C522DB4F23181F6500284B1D /* AlbumInfoTableViewController.swift in Sources */,
 				C522DB532319A8E900284B1D /* UIImageView+DownloadImage.swift in Sources */,
 				C5FDE45C230EF3D300C8D71E /* AlbumCollectionViewCell.swift in Sources */,
-				C5CF049F2322127B0058262D /* NetworkingRequests.swift in Sources */,
+				C5CF049F2322127B0058262D /* AlbumSingleton.swift in Sources */,
 				C5FDE45A230EF15400C8D71E /* AlbumCollectionViewController.swift in Sources */,
 				C5FDE445230EE0ED00C8D71E /* AppDelegate.swift in Sources */,
 				C522DB4D2311BB2C00284B1D /* Album.swift in Sources */,

@@ -9,11 +9,7 @@
 import UIKit
 import Alamofire
 
-class AlbumCollectionViewController: UICollectionViewController, MainNetworkingRequest {
-    func fetchTrendingAlbums(from url: URL, albumDataCompletionHandler: @escaping ([AlbumData]?, Error?) -> Void) {
-        <#code#>
-    }
-    
+class AlbumCollectionViewController: UICollectionViewController {
     
     private let reuseIdentifier = "albumCell"
     private let trendingAlbumsUrl : URL = URL(string: "https://theaudiodb.com/api/v1/json/1/trending.php?country=us&type=itunes&format=albums&country=us&type=itunes&format=albums")!
@@ -59,40 +55,18 @@ class AlbumCollectionViewController: UICollectionViewController, MainNetworkingR
         }
     }
 
+    //MARK: - Private functions
     private func loadAllAlbums(from url: URL) {
         activityIndicatorView.isHidden = false
         activityIndicatorView.startAnimating()
         
-        fetchTrendingAlbums(from: url) { (album, error) in
+        AlbumSingleton.shared.fetchTrending { (album, error) in
             guard let albumDataArray = album else {fatalError("error setting album") }
             self.createAlbumObjects(albumJsonArray: albumDataArray)
             self.activityIndicatorView.stopAnimating()
             self.activityIndicatorView.isHidden = true
         }
     }
-    
-    //MARK: - Private functions
-//    private func fetchTrendingAlbums(from url: URL, albumDataCompletionHandler: @escaping ([AlbumData]?, Error?) -> Void){
-//        Alamofire.request(url, method: .get).responseJSON { (response) in
-//            if response.result.isSuccess {
-//                let jsonData = response.data
-//                do {
-//                    let jsonDecoder = JSONDecoder()
-//                    let root = try jsonDecoder.decode(Root.self, from: jsonData!)
-//                    let albums = root.trending
-//                    albumDataCompletionHandler(albums, nil)
-//                } catch {
-//                    print("Error: \(error)")
-//                }
-//            } else {
-//                let alert = UIAlertController(title: "Something went wrong", message: "There was a problem retrieving data. Please try again", preferredStyle: .alert)
-//                let action = UIAlertAction(title: "OK", style: .default, handler: nil)
-//                alert.addAction(action)
-//                self.present(alert, animated: true, completion: nil)
-//                albumDataCompletionHandler(nil, response.error)
-//            }
-//        }
-//    }
     
     private func createAlbumObjects(albumJsonArray: [AlbumData]) {
         for album in albumJsonArray.reversed() {
