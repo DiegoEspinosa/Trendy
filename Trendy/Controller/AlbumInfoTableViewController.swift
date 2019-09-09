@@ -70,6 +70,7 @@ class AlbumInfoTableViewController: UITableViewController {
             }.done {
                 dispatchGroup.leave()
             }.catch { (error) in
+                self.displayAlertForError()
                 print("Error: \(error)")
         }
         
@@ -81,6 +82,7 @@ class AlbumInfoTableViewController: UITableViewController {
             }.done {
                 dispatchGroup.leave()
             }.catch { (error) in
+                self.displayAlertForError()
                 print("Error: \(error)")
         }
         
@@ -89,6 +91,15 @@ class AlbumInfoTableViewController: UITableViewController {
             self.activityIndicator.stopAnimating()
             self.tableView.reloadData()
         }
+    }
+    
+    private func displayAlertForError() {
+        let alert = UIAlertController(title: "Something went wrong", message: "There was a problem retrieving data. Please try again", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
+        activityIndicator.stopAnimating()
+        activityIndicator.isHidden = true
     }
     
     private func createTrackObjects(from tracks: [Track]) {

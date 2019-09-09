@@ -68,6 +68,12 @@ class AlbumCollectionViewController: UICollectionViewController {
                 self.activityIndicatorView.stopAnimating()
                 self.activityIndicatorView.isHidden = true
             }.catch { (error) in
+                let alert = UIAlertController(title: "Something went wrong", message: "There was a problem retrieving data. Please try again", preferredStyle: .alert)
+                let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alert.addAction(action)
+                self.present(alert, animated: true, completion: nil)
+                self.activityIndicatorView.stopAnimating()
+                self.activityIndicatorView.isHidden = true
                 print("Error: \(error)")
         }
     }
