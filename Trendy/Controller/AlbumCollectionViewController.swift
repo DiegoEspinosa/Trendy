@@ -13,7 +13,6 @@ import PromiseKit
 class AlbumCollectionViewController: UICollectionViewController {
     
     private let reuseIdentifier = "albumCell"
-    private let trendingAlbumsUrl : URL = URL(string: "https://theaudiodb.com/api/v1/json/1/trending.php?country=us&type=itunes&format=albums&country=us&type=itunes&format=albums")!
     private var albumArray : Array<Album> = []
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     
@@ -22,7 +21,7 @@ class AlbumCollectionViewController: UICollectionViewController {
 
         collectionView.delegate = self
         collectionView.dataSource = self
-        loadAllAlbums(from: trendingAlbumsUrl)
+        loadTrendingAlbums()
     }
 
     // MARK: UICollectionViewDataSource
@@ -57,14 +56,14 @@ class AlbumCollectionViewController: UICollectionViewController {
     }
 
     //MARK: - Private functions
-    private func loadAllAlbums(from url: URL) {
+    private func loadTrendingAlbums() {
         activityIndicatorView.isHidden = false
         activityIndicatorView.startAnimating()
         
         firstly {
             AlbumSingleton.shared.fetchTrending()
-            }.map { albumDataArray in
-                self.createAlbumObjects(albumJsonArray: albumDataArray)
+            }.map { trendingAlbumArray in
+                self.createAlbumObjects(from: trendingAlbumArray)
             }.done {
                 self.activityIndicatorView.stopAnimating()
                 self.activityIndicatorView.isHidden = true
@@ -73,8 +72,8 @@ class AlbumCollectionViewController: UICollectionViewController {
         }
     }
     
-    private func createAlbumObjects(albumJsonArray: [AlbumData]) {
-        for album in albumJsonArray.reversed() {
+    private func createAlbumObjects(from trendingAlbumArray: [AlbumData]) {
+        for album in trendingAlbumArray.reversed() {
             let albumObject = Album(rank: album.intChartPlace, title: album.strAlbum, artist: album.strArtist, id: album.idAlbum, imageUrl: album.strAlbumThumb)
             albumArray.append(albumObject)
         }

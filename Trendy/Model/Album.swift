@@ -28,7 +28,7 @@ class Album {
     }
 }
 
-//Main API Call
+//Trending Album Decodables
 struct Root: Decodable {
     let trending : [AlbumData]
 }
@@ -41,7 +41,7 @@ struct AlbumData: Decodable {
     var idAlbum : String
 }
 
-//Secondary API Call
+//Album Info Decodables
 struct Main: Decodable {
     let album : [AlbumInfo]
 }
