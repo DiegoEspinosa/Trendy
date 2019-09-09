@@ -74,11 +74,14 @@ class AlbumInfoTableViewController: UITableViewController {
         }
         
         dispatchGroup.enter()
-        AlbumSingleton.shared.fetchTracks(albumId: id) { (trackArray, error) in
-            if let tracks = trackArray {
-                self.createTrackObjects(tracks: tracks)
+        firstly {
+            AlbumSingleton.shared.fetchTracks(albumId: id)
+            }.map { trackArray in
+                self.createTrackObjects(from: trackArray)
+            }.done {
                 dispatchGroup.leave()
-            }
+            }.catch { (error) in
+                print("Error: \(error)")
         }
         
         dispatchGroup.notify(queue: .main) {
@@ -88,7 +91,7 @@ class AlbumInfoTableViewController: UITableViewController {
         }
     }
     
-    private func createTrackObjects(tracks: [Track]) {
+    private func createTrackObjects(from tracks: [Track]) {
         for track in tracks {
             let track = TrackObject(name: track.strTrack, number: track.intTrackNumber)
             self.albumTracks.append(track)

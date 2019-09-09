@@ -12,7 +12,7 @@ import PromiseKit
 protocol AlbumRepository {
     func fetchTrending() -> Promise<[AlbumData]>
     func fetchInfo(albumId: String) -> Promise<AlbumInfo>
-    func fetchTracks(albumId: String, albumTracksCompletionHandler: @escaping ([Track]?, Error?) -> Void)
+    func fetchTracks(albumId: String) -> Promise<[Track]>
 }
 
 class AlbumSingleton: AlbumRepository {
@@ -66,23 +66,23 @@ class AlbumSingleton: AlbumRepository {
         }
     }
     
-    func fetchTracks(albumId: String, albumTracksCompletionHandler: @escaping ([Track]?, Error?) -> Void) {
+    func fetchTracks(albumId: String) -> Promise<[Track]> {
         let url = URL(string: albumTracksString + albumId)!
-        
-        Alamofire.request(url, method: .get).responseJSON { (response) in
-            if response.result.isSuccess {
-                let jsonData = response.data
-                do {
-                    let jsonDecoder = JSONDecoder()
-                    let tracks = try jsonDecoder.decode(Tracks.self, from: jsonData!)
-                    let tracksArray = tracks.track
-                    albumTracksCompletionHandler(tracksArray, nil)
-                } catch {
-                    print("Error decoding album tracks data")
-                    albumTracksCompletionHandler(nil, response.error)
+        return Promise { seal in
+            Alamofire.request(url, method: .get).responseJSON { (response) in
+                if let jsonData = response.data {
+                    do {
+                        let jsonDecoder = JSONDecoder()
+                        let tracks = try jsonDecoder.decode(Tracks.self, from: jsonData)
+                        let tracksArray = tracks.track
+                        seal.fulfill(tracksArray)
+                    } catch {
+                        seal.reject(error)
+                    }
                 }
-            } else {
-                print("Error retrieving album tracks data")
+                if let error = response.error {
+                    seal.reject(error)
+                }
             }
         }
     }
