@@ -10,7 +10,7 @@ import Foundation
 import PromiseKit
 
 protocol AlbumRepository {
-    func fetchTrending(albumDataCompletionHandler: @escaping ([AlbumData]?, Error?) -> Void)
+    func fetchTrending() -> Promise<[AlbumData]>
     func fetchInfo(albumId: String, albumInfoCompletionHandler: @escaping ([AlbumInfo]?, Error?) -> Void)
     func fetchTracks(albumId: String, albumTracksCompletionHandler: @escaping ([Track]?, Error?) -> Void)
 }
@@ -25,20 +25,22 @@ class AlbumSingleton: AlbumRepository {
     
     private init(){}
     
-    func fetchTrending(albumDataCompletionHandler: @escaping ([AlbumData]?, Error?) -> Void) {
-        Alamofire.request(trendingAlbumsUrl, method: .get).responseJSON { (response) in
-            if response.result.isSuccess {
-                let jsonData = response.data
-                do {
-                    let jsonDecoder = JSONDecoder()
-                    let root = try jsonDecoder.decode(Root.self, from: jsonData!)
-                    let albums = root.trending
-                    albumDataCompletionHandler(albums, nil)
-                } catch {
-                    print("Error decoding trending albums data")
+    func fetchTrending() -> Promise<[AlbumData]> {
+        return Promise { seal in
+            Alamofire.request(trendingAlbumsUrl, method: .get).responseJSON {response in
+                if let jsonData = response.data {
+                    do {
+                        let jsonDecoder = JSONDecoder()
+                        let root = try jsonDecoder.decode(Root.self, from: jsonData)
+                        let albums = root.trending
+                        seal.fulfill(albums)
+                    } catch {
+                        seal.reject(error)
+                    }
                 }
-            } else {
-                print("Error retrieving trending albums data")
+                if let error = response.error {
+                    seal.reject(error)
+                }
             }
         }
     }

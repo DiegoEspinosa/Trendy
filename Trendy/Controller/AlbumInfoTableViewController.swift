@@ -20,9 +20,7 @@ class AlbumInfoTableViewController: UITableViewController {
         super.viewDidLoad()
         
         tableView.separatorStyle = .none
-        
-        if let currentAlbum = album {
-            //album exists
+        if album != nil {
             loadInAllData()
         }
     }

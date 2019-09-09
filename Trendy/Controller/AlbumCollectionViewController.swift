@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import PromiseKit
 
 class AlbumCollectionViewController: UICollectionViewController {
     
@@ -60,11 +61,15 @@ class AlbumCollectionViewController: UICollectionViewController {
         activityIndicatorView.isHidden = false
         activityIndicatorView.startAnimating()
         
-        AlbumSingleton.shared.fetchTrending { (album, error) in
-            guard let albumDataArray = album else {fatalError("error setting album") }
-            self.createAlbumObjects(albumJsonArray: albumDataArray)
-            self.activityIndicatorView.stopAnimating()
-            self.activityIndicatorView.isHidden = true
+        firstly {
+            AlbumSingleton.shared.fetchTrending()
+            }.map { albumDataArray in
+                self.createAlbumObjects(albumJsonArray: albumDataArray)
+            }.done {
+                self.activityIndicatorView.stopAnimating()
+                self.activityIndicatorView.isHidden = true
+            }.catch { (error) in
+                print("Error: \(error)")
         }
     }
     
