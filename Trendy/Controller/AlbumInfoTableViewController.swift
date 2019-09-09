@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import PromiseKit
 
 class AlbumInfoTableViewController: UITableViewController {
     
@@ -61,10 +62,15 @@ class AlbumInfoTableViewController: UITableViewController {
         guard let id = album?.albumID else {fatalError("Error setting album ID")}
         
         dispatchGroup.enter()
-        AlbumSingleton.shared.fetchInfo(albumId: id) { (albumInfoArray, error) in
-            self.album?.albumGenre = albumInfoArray?[0].strGenre ?? ""
-            self.album?.albumDescription = albumInfoArray?[0].strDescriptionEN ?? ""
-            dispatchGroup.leave()
+        firstly {
+            AlbumSingleton.shared.fetchInfo(albumId: id)
+            }.map { albumInfo in
+                self.album?.albumGenre = albumInfo.strGenre
+                self.album?.albumDescription = albumInfo.strDescriptionEN
+            }.done {
+                dispatchGroup.leave()
+            }.catch { (error) in
+                print("Error: \(error)")
         }
         
         dispatchGroup.enter()

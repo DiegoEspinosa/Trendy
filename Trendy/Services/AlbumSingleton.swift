@@ -11,7 +11,7 @@ import PromiseKit
 
 protocol AlbumRepository {
     func fetchTrending() -> Promise<[AlbumData]>
-    func fetchInfo(albumId: String, albumInfoCompletionHandler: @escaping ([AlbumInfo]?, Error?) -> Void)
+    func fetchInfo(albumId: String) -> Promise<AlbumInfo>
     func fetchTracks(albumId: String, albumTracksCompletionHandler: @escaping ([Track]?, Error?) -> Void)
 }
 
@@ -45,23 +45,23 @@ class AlbumSingleton: AlbumRepository {
         }
     }
     
-    func fetchInfo(albumId: String, albumInfoCompletionHandler: @escaping ([AlbumInfo]?, Error?) -> Void) {
+    func fetchInfo(albumId: String) -> Promise<AlbumInfo> {
         let url = URL(string: albumInfoString + albumId)!
-        
-        Alamofire.request(url, method: .get).responseJSON { (response) in
-            if response.result.isSuccess {
-                let jsonData = response.data
-                do {
-                    let jsonDecoder = JSONDecoder()
-                    let mainAlbum = try jsonDecoder.decode(Main.self, from: jsonData!)
-                    let albumInfo = mainAlbum.album
-                    albumInfoCompletionHandler(albumInfo, nil)
-                } catch {
-                    print("Error decoding album info data")
-                    albumInfoCompletionHandler(nil, response.error)
+        return Promise { seal in
+            Alamofire.request(url, method: .get).responseJSON {response in
+                if let jsonData = response.data {
+                    do {
+                        let jsonDecoder = JSONDecoder()
+                        let mainAlbum = try jsonDecoder.decode(Main.self, from: jsonData)
+                        let albumInfo = mainAlbum.album[0]
+                        seal.fulfill(albumInfo)
+                    } catch {
+                        seal.reject(error)
+                    }
                 }
-            } else {
-                print("Error retrieving album info data")
+                if let error = response.error {
+                    seal.reject(error)
+                }
             }
         }
     }
