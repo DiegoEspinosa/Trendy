@@ -60,9 +60,7 @@ class AlbumCollectionViewController: UICollectionViewController {
         activityIndicatorView.isHidden = false
         activityIndicatorView.startAnimating()
         
-        firstly {
-            AlbumSingleton.shared.fetchTrending()
-            }.map { trendingAlbumArray in
+        AlbumSingleton.shared.fetchTrending().map { trendingAlbumArray in
                 self.createAlbumObjects(from: trendingAlbumArray)
             }.done {
                 self.activityIndicatorView.stopAnimating()
@@ -74,7 +72,6 @@ class AlbumCollectionViewController: UICollectionViewController {
                 self.present(alert, animated: true, completion: nil)
                 self.activityIndicatorView.stopAnimating()
                 self.activityIndicatorView.isHidden = true
-                print("Error: \(error)")
         }
     }
     

@@ -55,41 +55,24 @@ class AlbumInfoTableViewController: UITableViewController {
     
     //MARK: - Private Functions
     private func loadInAllData() {
-        let dispatchGroup = DispatchGroup()
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
         
         guard let id = album?.albumID else {fatalError("Error setting album ID")}
         
-        dispatchGroup.enter()
-        firstly {
-            AlbumSingleton.shared.fetchInfo(albumId: id)
-            }.map { albumInfo in
+        let promiseInfo = AlbumSingleton.shared.fetchInfo(albumId: id)
+        let promiseTracks = AlbumSingleton.shared.fetchTracks(albumId: id)
+        
+        when(fulfilled: promiseInfo, promiseTracks).map { albumInfo, trackArray in
                 self.album?.albumGenre = albumInfo.strGenre
                 self.album?.albumDescription = albumInfo.strDescriptionEN
-            }.done {
-                dispatchGroup.leave()
-            }.catch { (error) in
-                self.displayAlertForError()
-                print("Error: \(error)")
-        }
-        
-        dispatchGroup.enter()
-        firstly {
-            AlbumSingleton.shared.fetchTracks(albumId: id)
-            }.map { trackArray in
                 self.createTrackObjects(from: trackArray)
             }.done {
-                dispatchGroup.leave()
+                self.activityIndicator.isHidden = true
+                self.activityIndicator.stopAnimating()
+                self.tableView.reloadData()
             }.catch { (error) in
                 self.displayAlertForError()
-                print("Error: \(error)")
-        }
-        
-        dispatchGroup.notify(queue: .main) {
-            self.activityIndicator.isHidden = true
-            self.activityIndicator.stopAnimating()
-            self.tableView.reloadData()
         }
     }
     
