@@ -8,6 +8,7 @@
 
 import UIKit
 import Alamofire
+import PromiseKit
 
 class AlbumInfoTableViewController: UITableViewController {
     
@@ -20,9 +21,7 @@ class AlbumInfoTableViewController: UITableViewController {
         super.viewDidLoad()
         
         tableView.separatorStyle = .none
-        
-        if let currentAlbum = album {
-            //album exists
+        if album != nil {
             loadInAllData()
         }
     }
@@ -56,35 +55,37 @@ class AlbumInfoTableViewController: UITableViewController {
     
     //MARK: - Private Functions
     private func loadInAllData() {
-        let dispatchGroup = DispatchGroup()
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()
         
         guard let id = album?.albumID else {fatalError("Error setting album ID")}
         
-        dispatchGroup.enter()
-        AlbumSingleton.shared.fetchInfo(albumId: id) { (albumInfoArray, error) in
-            self.album?.albumGenre = albumInfoArray?[0].strGenre ?? ""
-            self.album?.albumDescription = albumInfoArray?[0].strDescriptionEN ?? ""
-            dispatchGroup.leave()
-        }
+        let promiseInfo = AlbumSingleton.shared.fetchInfo(albumId: id)
+        let promiseTracks = AlbumSingleton.shared.fetchTracks(albumId: id)
         
-        dispatchGroup.enter()
-        AlbumSingleton.shared.fetchTracks(albumId: id) { (trackArray, error) in
-            if let tracks = trackArray {
-                self.createTrackObjects(tracks: tracks)
-                dispatchGroup.leave()
-            }
-        }
-        
-        dispatchGroup.notify(queue: .main) {
-            self.activityIndicator.isHidden = true
-            self.activityIndicator.stopAnimating()
-            self.tableView.reloadData()
+        when(fulfilled: promiseInfo, promiseTracks).map { albumInfo, trackArray in
+                self.album?.albumGenre = albumInfo.strGenre
+                self.album?.albumDescription = albumInfo.strDescriptionEN
+                self.createTrackObjects(from: trackArray)
+            }.done {
+                self.activityIndicator.isHidden = true
+                self.activityIndicator.stopAnimating()
+                self.tableView.reloadData()
+            }.catch { (error) in
+                self.displayAlertForError()
         }
     }
     
-    private func createTrackObjects(tracks: [Track]) {
+    private func displayAlertForError() {
+        let alert = UIAlertController(title: "Something went wrong", message: "There was a problem retrieving data. Please try again", preferredStyle: .alert)
+        let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alert.addAction(action)
+        self.present(alert, animated: true, completion: nil)
+        activityIndicator.stopAnimating()
+        activityIndicator.isHidden = true
+    }
+    
+    private func createTrackObjects(from tracks: [Track]) {
         for track in tracks {
             let track = TrackObject(name: track.strTrack, number: track.intTrackNumber)
             self.albumTracks.append(track)

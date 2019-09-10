@@ -8,11 +8,11 @@
 
 import UIKit
 import Alamofire
+import PromiseKit
 
 class AlbumCollectionViewController: UICollectionViewController {
     
     private let reuseIdentifier = "albumCell"
-    private let trendingAlbumsUrl : URL = URL(string: "https://theaudiodb.com/api/v1/json/1/trending.php?country=us&type=itunes&format=albums&country=us&type=itunes&format=albums")!
     private var albumArray : Array<Album> = []
     @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
     
@@ -21,7 +21,7 @@ class AlbumCollectionViewController: UICollectionViewController {
 
         collectionView.delegate = self
         collectionView.dataSource = self
-        loadAllAlbums(from: trendingAlbumsUrl)
+        loadTrendingAlbums()
     }
 
     // MARK: UICollectionViewDataSource
@@ -56,20 +56,27 @@ class AlbumCollectionViewController: UICollectionViewController {
     }
 
     //MARK: - Private functions
-    private func loadAllAlbums(from url: URL) {
+    private func loadTrendingAlbums() {
         activityIndicatorView.isHidden = false
         activityIndicatorView.startAnimating()
         
-        AlbumSingleton.shared.fetchTrending { (album, error) in
-            guard let albumDataArray = album else {fatalError("error setting album") }
-            self.createAlbumObjects(albumJsonArray: albumDataArray)
-            self.activityIndicatorView.stopAnimating()
-            self.activityIndicatorView.isHidden = true
+        AlbumSingleton.shared.fetchTrending().map { trendingAlbumArray in
+                self.createAlbumObjects(from: trendingAlbumArray)
+            }.done {
+                self.activityIndicatorView.stopAnimating()
+                self.activityIndicatorView.isHidden = true
+            }.catch { (error) in
+                let alert = UIAlertController(title: "Something went wrong", message: "There was a problem retrieving data. Please try again", preferredStyle: .alert)
+                let action = UIAlertAction(title: "OK", style: .default, handler: nil)
+                alert.addAction(action)
+                self.present(alert, animated: true, completion: nil)
+                self.activityIndicatorView.stopAnimating()
+                self.activityIndicatorView.isHidden = true
         }
     }
     
-    private func createAlbumObjects(albumJsonArray: [AlbumData]) {
-        for album in albumJsonArray.reversed() {
+    private func createAlbumObjects(from trendingAlbumArray: [AlbumData]) {
+        for album in trendingAlbumArray.reversed() {
             let albumObject = Album(rank: album.intChartPlace, title: album.strAlbum, artist: album.strArtist, id: album.idAlbum, imageUrl: album.strAlbumThumb)
             albumArray.append(albumObject)
         }
