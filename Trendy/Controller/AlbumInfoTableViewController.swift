@@ -21,6 +21,11 @@ class AlbumInfoTableViewController: UITableViewController {
         super.viewDidLoad()
         
         tableView.separatorStyle = .none
+        
+        let infoButton = UIButton(type: .infoLight)
+        infoButton.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: infoButton)
+        
         if album != nil {
             loadInAllData()
         }
@@ -93,6 +98,10 @@ class AlbumInfoTableViewController: UITableViewController {
                 trackOne.trackNum < trackTwo.trackNum
             })
         }
+    }
+    
+    @objc private func infoButtonTapped() {
+        //Present new view controller that brings up an info screen
     }
     
     private func createHeaderSection() -> UIView {
