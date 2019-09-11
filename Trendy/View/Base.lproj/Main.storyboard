@@ -158,44 +158,48 @@
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="oha-gg-OXM" id="BSg-BA-Gc8"/>
+                        <segue destination="SDb-U8-oia" kind="show" identifier="toAlbumDescription" id="lSw-X4-sOt"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Mrw-Kl-War" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2481" y="185"/>
         </scene>
-        <!--Album Description View Controller-->
+        <!--Album Description-->
         <scene sceneID="tHI-5J-HVo">
             <objects>
-                <viewController storyboardIdentifier="AlbumDescriptionViewController" id="SDb-U8-oia" customClass="AlbumDescriptionViewController" customModule="Trendy" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AlbumDescriptionViewController" title="Album Description" id="SDb-U8-oia" customClass="AlbumDescriptionViewController" customModule="Trendy" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="YOM-3m-Ja4">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0O6-6u-vHd">
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="76x-DO-07B">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                            </textView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="47f-wa-awI" firstAttribute="bottom" secondItem="0O6-6u-vHd" secondAttribute="bottom" id="3Sc-kv-SdS"/>
-                            <constraint firstItem="47f-wa-awI" firstAttribute="trailing" secondItem="0O6-6u-vHd" secondAttribute="trailing" id="EuN-8g-Ozo"/>
-                            <constraint firstItem="0O6-6u-vHd" firstAttribute="top" secondItem="47f-wa-awI" secondAttribute="top" id="IuK-Vf-ssn"/>
-                            <constraint firstItem="0O6-6u-vHd" firstAttribute="leading" secondItem="47f-wa-awI" secondAttribute="leading" id="T5R-Ib-ULr"/>
+                            <constraint firstItem="76x-DO-07B" firstAttribute="leading" secondItem="47f-wa-awI" secondAttribute="leading" id="8gW-9p-nQB"/>
+                            <constraint firstItem="47f-wa-awI" firstAttribute="trailing" secondItem="76x-DO-07B" secondAttribute="trailing" id="F6Q-2j-crv"/>
+                            <constraint firstItem="47f-wa-awI" firstAttribute="bottom" secondItem="76x-DO-07B" secondAttribute="bottom" id="oTk-PF-l1J"/>
+                            <constraint firstItem="76x-DO-07B" firstAttribute="top" secondItem="47f-wa-awI" secondAttribute="top" id="wPN-yH-rCm"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="47f-wa-awI"/>
                     </view>
-                    <navigationItem key="navigationItem" id="UQF-SQ-ayI"/>
+                    <navigationItem key="navigationItem" title=" " largeTitleDisplayMode="never" id="UQF-SQ-ayI">
+                        <barButtonItem key="backBarButtonItem" title=" " id="Fg9-36-FKe"/>
+                    </navigationItem>
                     <connections>
-                        <outlet property="albumDescriptionLabel" destination="0O6-6u-vHd" id="mI7-9e-vlp"/>
+                        <outlet property="albumDescriptionTextView" destination="76x-DO-07B" id="u5a-gE-UGp"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kX6-Mb-RYO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3852" y="-152"/>
+            <point key="canvasLocation" x="3365.5999999999999" y="-137.18140929535232"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="XL0-eQ-KGG">
@@ -236,7 +240,7 @@
         <!--Navigation Controller-->
         <scene sceneID="luh-lB-c4Y">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="TbY-rT-gxz" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="AlbumDescriptionNavViewController" automaticallyAdjustsScrollViewInsets="NO" id="TbY-rT-gxz" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="fjc-i3-KwQ">
                         <rect key="frame" x="0.0" y="20" width="375" height="44"/>
@@ -249,10 +253,11 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yLE-Od-XKP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3178" y="-152"/>
+            <point key="canvasLocation" x="2631" y="-528"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="TBV-sr-zDR"/>
+        <segue reference="lSw-X4-sOt"/>
+        <segue reference="lxF-wi-hTu"/>
     </inferredMetricsTieBreakers>
 </document>

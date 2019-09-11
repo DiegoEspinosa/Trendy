@@ -101,9 +101,16 @@ class AlbumInfoTableViewController: UITableViewController {
     }
     
     @objc private func infoButtonTapped() {
-        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
-        let newViewController = storyBoard.instantiateViewController(withIdentifier: "AlbumDescriptionViewController") as! AlbumDescriptionViewController
-        self.present(newViewController, animated: true, completion: nil)
+        self.performSegue(withIdentifier: "toAlbumDescription", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toAlbumDescription" {
+            guard let albumDescriptionVC = segue.destination as? AlbumDescriptionViewController else {fatalError("Error setting view controller")}
+            guard let albumDescription = album?.albumDescription else {fatalError("Error setting album description")}
+            
+            albumDescriptionVC.albumDescription = albumDescription
+        }
     }
     
     private func createHeaderSection() -> UIView {

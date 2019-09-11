@@ -10,11 +10,15 @@ import UIKit
 
 class AlbumDescriptionViewController: UIViewController {
 
-    @IBOutlet weak var albumDescriptionLabel: UILabel!
+    var albumDescription : String?
+    @IBOutlet weak var albumDescriptionTextView: UITextView!
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        if let description = albumDescription {
+            albumDescriptionTextView.text = description
+        }
     }
     
 
