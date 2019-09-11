@@ -99,7 +99,9 @@ class AlbumInfoTableViewController: UITableViewController {
         let header = UIView.init(frame: CGRect.init(x: 0, y: 0, width: Int(tableView.frame.width), height: 400))
         
         let imageView = UIImageView.init(frame: CGRect.init(x: (header.frame.width / 2) - 75, y: 8, width: 150 , height: 150))
-        imageView.downloadImage(from: (album?.albumImageUrl)!)
+        if let imageUrl = album?.albumImageUrl {
+            imageView.downloadImage(from: imageUrl)
+        }
         
         let titleLabel = createAlbumTitleLabel(header: header)
         let artistLabel = createAlbumArtistLabel(header: header)
@@ -119,7 +121,9 @@ class AlbumInfoTableViewController: UITableViewController {
     private func createAlbumTitleLabel(header: UIView) -> UILabel {
         let title = UILabel()
         title.frame = CGRect.init(x: 0, y: 158, width: header.frame.width, height: 25)
-        title.text = album?.albumTitle
+        if let albumTitle = album?.albumTitle {
+            title.text = albumTitle
+        }
         title.font = UIFont.systemFont(ofSize: 18)
         title.textColor = UIColor.black
         title.textAlignment = .center
@@ -129,7 +133,9 @@ class AlbumInfoTableViewController: UITableViewController {
     private func createAlbumArtistLabel(header: UIView) -> UILabel {
         let artist = UILabel()
         artist.frame = CGRect.init(x: 0, y: 183, width: header.frame.width, height: 25)
-        artist.text = album?.albumArtist
+        if let artistName = album?.albumArtist {
+            artist.text = artistName
+        }
         artist.font = UIFont.systemFont(ofSize: 18)
         artist.textColor = UIColor.black
         artist.textAlignment = .center
@@ -139,7 +145,9 @@ class AlbumInfoTableViewController: UITableViewController {
     private func createAlbumGenreLabel(header: UIView) -> UILabel {
         let genre = UILabel()
         genre.frame = CGRect.init(x: 0, y: 208, width: header.frame.width, height: 25)
-        genre.text = album?.albumGenre
+        if let albumGenre = album?.albumGenre {
+            genre.text = albumGenre
+        }
         genre.font = UIFont.systemFont(ofSize: 16)
         genre.textColor = UIColor.black
         genre.textAlignment = .center
@@ -149,7 +157,9 @@ class AlbumInfoTableViewController: UITableViewController {
     private func createAlbumDescLabel(header: UIView) -> UILabel {
         let description = UILabel()
         description.frame = CGRect.init(x: 5, y: 233, width: header.frame.width - 25, height: 150)
-        description.text = album?.albumDescription
+        if let albumDescription = album?.albumDescription {
+            description.text = albumDescription
+        }
         description.font = UIFont.systemFont(ofSize: 15)
         description.textColor = UIColor.black
         description.textAlignment = .center
