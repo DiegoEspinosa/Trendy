@@ -10,6 +10,7 @@ import UIKit
 
 class AlbumDescriptionViewController: UIViewController {
 
+    @IBOutlet weak var albumDescriptionLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
 

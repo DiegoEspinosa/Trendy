@@ -101,7 +101,9 @@ class AlbumInfoTableViewController: UITableViewController {
     }
     
     @objc private func infoButtonTapped() {
-        //Present new view controller that brings up an info screen
+        let storyBoard : UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let newViewController = storyBoard.instantiateViewController(withIdentifier: "AlbumDescriptionViewController") as! AlbumDescriptionViewController
+        self.present(newViewController, animated: true, completion: nil)
     }
     
     private func createHeaderSection() -> UIView {

@@ -167,14 +167,31 @@
         <!--Album Description View Controller-->
         <scene sceneID="tHI-5J-HVo">
             <objects>
-                <viewController id="SDb-U8-oia" customClass="AlbumDescriptionViewController" customModule="Trendy" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="AlbumDescriptionViewController" id="SDb-U8-oia" customClass="AlbumDescriptionViewController" customModule="Trendy" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="YOM-3m-Ja4">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0O6-6u-vHd">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="47f-wa-awI" firstAttribute="bottom" secondItem="0O6-6u-vHd" secondAttribute="bottom" id="3Sc-kv-SdS"/>
+                            <constraint firstItem="47f-wa-awI" firstAttribute="trailing" secondItem="0O6-6u-vHd" secondAttribute="trailing" id="EuN-8g-Ozo"/>
+                            <constraint firstItem="0O6-6u-vHd" firstAttribute="top" secondItem="47f-wa-awI" secondAttribute="top" id="IuK-Vf-ssn"/>
+                            <constraint firstItem="0O6-6u-vHd" firstAttribute="leading" secondItem="47f-wa-awI" secondAttribute="leading" id="T5R-Ib-ULr"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="47f-wa-awI"/>
                     </view>
                     <navigationItem key="navigationItem" id="UQF-SQ-ayI"/>
+                    <connections>
+                        <outlet property="albumDescriptionLabel" destination="0O6-6u-vHd" id="mI7-9e-vlp"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="kX6-Mb-RYO" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
