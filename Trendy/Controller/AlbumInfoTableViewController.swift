@@ -20,7 +20,7 @@ class AlbumInfoTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.separatorStyle = .none
+        tableView.separatorStyle = .singleLine
         
         let infoButton = UIButton(type: .infoLight)
         infoButton.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
@@ -62,16 +62,16 @@ class AlbumInfoTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.section == 0 {
-            //First static cell in own section (Artist Image and Name)
+            //First static cell in first section (Artist Image and Name)
             let cell = tableView.dequeueReusableCell(withIdentifier: "artistInfoCell", for: indexPath) as! AlbumArtistTableViewCell
             guard let artistName = album?.albumArtist else {fatalError("Error setting name")}
-            //guard let artistImageString = album?.albumAristImageUrl else {fatalError("Error setting artist image url")}
+            guard let artistImageString = album?.albumArtistImageUrl else {fatalError("Error setting artist image url")}
             cell.artistLabel.text = artistName
-            //cell.artistImageView.downloadImage(from: artistImageString)
+            cell.artistImageView.downloadImage(from: artistImageString)
             return cell
         }
-        if indexPath.row == 0 && indexPath.section == 1 {
-            //Second static cell in second section which contains the other dynamic cells (Total songs and total length in minutes)
+        if indexPath.section == 1 && indexPath.row == 0 {
+            //First static cell in second section (Total songs and total length in minutes)
             let cell = tableView.dequeueReusableCell(withIdentifier: "totalTracksInfoCell", for: indexPath) as! AlbumTotalTracksInfoTableViewCell
             guard let albumLength = album?.albumLength else {fatalError("Error setting album length")}
             cell.totalTracksInfoCell.text = "\(albumTracks.count) songs * \(albumLength) minutes"
@@ -89,6 +89,11 @@ class AlbumInfoTableViewController: UITableViewController {
         }
     }
     
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let height : CGFloat = 50
+        return height
+    }
+    
     //MARK: - Private Functions
     private func loadInAllData() {
         activityIndicator.isHidden = false
@@ -98,15 +103,20 @@ class AlbumInfoTableViewController: UITableViewController {
         
         let promiseInfo = AlbumSingleton.shared.fetchInfo(albumId: id)
         let promiseTracks = AlbumSingleton.shared.fetchTracks(albumId: id)
+        guard let artistId = album?.albumArtistID else {fatalError("Error setting artist ID")}
+        let promiseArtist = AlbumSingleton.shared.fetchArtist(artistId: artistId)
         
-        when(fulfilled: promiseInfo, promiseTracks).map { albumInfo, trackArray in
+        when(fulfilled: promiseInfo, promiseTracks, promiseArtist).map { albumInfo, trackArray, artist in
                 self.album?.albumDescription = albumInfo.strDescriptionEN
                 self.album?.albumReleaseDate = albumInfo.intYearReleased
+            
+                self.album?.albumArtistImageUrl = artist.strArtistThumb
+            
                 self.createTrackObjects(from: trackArray)
             }.done {
+                self.tableView.reloadData()
                 self.activityIndicator.isHidden = true
                 self.activityIndicator.stopAnimating()
-                self.tableView.reloadData()
             }.catch { (error) in
                 self.displayAlertForError()
         }
@@ -168,11 +178,12 @@ class AlbumInfoTableViewController: UITableViewController {
     
     private func createAlbumTitleLabel(header: UIView) -> UILabel {
         let title = UILabel()
-        title.frame = CGRect.init(x: 173, y: 16, width: header.frame.width / 2, height: 25)
+        title.frame = CGRect.init(x: 173, y: 16, width: header.frame.width / 2, height: 50)
         if let albumTitle = album?.albumTitle {
             title.text = albumTitle
         }
         title.font = UIFont.systemFont(ofSize: 18)
+        title.numberOfLines = 0
         title.textColor = UIColor.black
         title.textAlignment = .center
         return title
@@ -180,7 +191,7 @@ class AlbumInfoTableViewController: UITableViewController {
     
     private func createAlbumReleaseDateLabel(header: UIView) -> UILabel {
         let releaseDate = UILabel()
-        releaseDate.frame = CGRect.init(x: 173, y: 49, width: header.frame.width / 2, height: 25)
+        releaseDate.frame = CGRect.init(x: 173, y: 66, width: header.frame.width / 2, height: 25)
         if let albumReleaseDate = album?.albumReleaseDate {
             releaseDate.text = "Released in " + albumReleaseDate
         }

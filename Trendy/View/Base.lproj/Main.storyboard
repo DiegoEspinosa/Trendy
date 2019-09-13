@@ -126,18 +126,30 @@
                                     <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                     <autoresizingMask key="autoresizingMask"/>
                                     <subviews>
-                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4Sd-dF-GCo">
-                                            <rect key="frame" x="0.0" y="0.0" width="44" height="44"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        </imageView>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pFx-48-38H">
-                                            <rect key="frame" x="52" y="11" width="323" height="21"/>
-                                            <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pFx-48-38H">
+                                            <rect key="frame" x="60" y="11" width="315" height="21"/>
+                                            <constraints>
+                                                <constraint firstAttribute="width" constant="315" id="Hp1-aX-sjj"/>
+                                            </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
+                                        <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="4Sd-dF-GCo">
+                                            <rect key="frame" x="8" y="0.0" width="44" height="43"/>
+                                        </imageView>
                                     </subviews>
+                                    <constraints>
+                                        <constraint firstItem="4Sd-dF-GCo" firstAttribute="top" secondItem="7an-VO-VhO" secondAttribute="top" id="1GH-dJ-nfR"/>
+                                        <constraint firstAttribute="bottomMargin" secondItem="pFx-48-38H" secondAttribute="bottom" constant="1" id="91W-uL-HfI"/>
+                                        <constraint firstItem="pFx-48-38H" firstAttribute="leading" secondItem="4Sd-dF-GCo" secondAttribute="trailing" constant="8" symbolic="YES" id="BJq-u7-CnE"/>
+                                        <constraint firstAttribute="trailing" secondItem="pFx-48-38H" secondAttribute="trailing" id="HDn-F8-Pwc"/>
+                                        <constraint firstItem="pFx-48-38H" firstAttribute="leading" secondItem="4Sd-dF-GCo" secondAttribute="trailing" constant="8" id="M9Z-nt-ax3"/>
+                                        <constraint firstItem="pFx-48-38H" firstAttribute="leading" secondItem="4Sd-dF-GCo" secondAttribute="trailing" constant="8" id="XYs-gD-oEl"/>
+                                        <constraint firstItem="4Sd-dF-GCo" firstAttribute="leading" secondItem="7an-VO-VhO" secondAttribute="leadingMargin" constant="-8" id="d2e-Jb-iMh"/>
+                                        <constraint firstItem="pFx-48-38H" firstAttribute="centerY" secondItem="4Sd-dF-GCo" secondAttribute="centerY" id="jbn-Sd-NXa"/>
+                                        <constraint firstItem="pFx-48-38H" firstAttribute="top" secondItem="7an-VO-VhO" secondAttribute="topMargin" id="utg-KI-RyA"/>
+                                    </constraints>
                                 </tableViewCellContentView>
                                 <connections>
                                     <outlet property="artistImageView" destination="4Sd-dF-GCo" id="RJE-Dp-a0R"/>
