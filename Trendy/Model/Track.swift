@@ -11,10 +11,12 @@ import Foundation
 class TrackObject {
     var trackName : String = ""
     var trackNum : Int = 0
+    var trackLength : Int = 0
     
-    init(name: String, number: String) {
+    init(name: String, number: String, length: String) {
         trackName = name
         trackNum = Int(number)!
+        trackLength = Int(length)! / 60000
     }
 }
 
@@ -25,4 +27,5 @@ struct Tracks: Decodable {
 struct Track: Decodable {
     var strTrack : String
     var intTrackNumber : String
+    var intDuration : String
 }

@@ -15,9 +15,10 @@ class Album {
     public var albumArtist : String = ""
     public var albumImageUrl : String = ""
     public var albumID : String = ""
-    public var albumGenre : String = ""
     public var albumDescription : String = ""
-    
+    public var albumReleaseDate : String = ""
+    public var albumAristImageUrl : String = ""
+    public var albumLength : String = ""
     
     init(rank: String, title: String, artist: String, id: String, imageUrl: String) {
         albumRank = Int(rank)!
@@ -47,6 +48,6 @@ struct Main: Decodable {
 }
 
 struct AlbumInfo : Decodable {
-    var strGenre : String
     var strDescriptionEN : String
+    var intYearReleased : String
 }

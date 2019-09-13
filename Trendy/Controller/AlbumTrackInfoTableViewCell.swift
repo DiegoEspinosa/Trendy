@@ -8,10 +8,11 @@
 
 import UIKit
 
-class AlbumInfoTableViewCell: UITableViewCell {
+class AlbumTrackInfoTableViewCell: UITableViewCell {
 
     @IBOutlet weak var trackNumberLabel: UILabel!
     @IBOutlet weak var trackTitleLabel: UILabel!
+    @IBOutlet weak var trackLengthLabel: UILabel!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
