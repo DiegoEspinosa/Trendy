@@ -20,7 +20,12 @@ class AlbumInfoTableViewController: UITableViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        tableView.separatorStyle = .none
+        tableView.separatorStyle = .singleLine
+        
+        let infoButton = UIButton(type: .infoLight)
+        infoButton.addTarget(self, action: #selector(infoButtonTapped), for: .touchUpInside)
+        navigationItem.rightBarButtonItem = UIBarButtonItem(customView: infoButton)
+        
         if album != nil {
             loadInAllData()
         }
@@ -28,29 +33,65 @@ class AlbumInfoTableViewController: UITableViewController {
 
     // MARK: - Table view data source
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return albumTracks.count
+        if section == 0 {
+            return 1
+        } else {
+            return albumTracks.count + 1
+        }
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let header = createHeaderSection()
+        var header : UIView = UIView()
+        if section == 0 {
+        header = createHeaderSection()
+        }
         return header
     }
     
     override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return CGFloat(400)
+        var height = CGFloat(0)
+        if section == 0 {
+            height = CGFloat(200)
+        }
+        return height
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "albumInfoCell", for: indexPath) as! AlbumInfoTableViewCell
-
-        cell.trackNumberLabel.text = String(albumTracks[indexPath.row].trackNum) + "."
-        cell.trackTitleLabel.text = albumTracks[indexPath.row].trackName
-
-        return cell
+        if indexPath.section == 0 {
+            //First static cell in first section (Artist Image and Name)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "artistInfoCell", for: indexPath) as! AlbumArtistTableViewCell
+            guard let artistName = album?.albumArtist else {fatalError("Error setting name")}
+            guard let artistImageString = album?.albumArtistImageUrl else {fatalError("Error setting artist image url")}
+            cell.artistLabel.text = artistName
+            cell.artistImageView.downloadImage(from: artistImageString)
+            return cell
+        }
+        if indexPath.section == 1 && indexPath.row == 0 {
+            //First static cell in second section (Total songs and total length in minutes)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "totalTracksInfoCell", for: indexPath) as! AlbumTotalTracksInfoTableViewCell
+            guard let albumLength = album?.albumLength else {fatalError("Error setting album length")}
+            cell.totalTracksInfoCell.text = "\(albumTracks.count) songs * \(albumLength) minutes"
+            cell.totalTracksInfoCell.textAlignment = .left
+            return cell
+        } else {
+            //Dyanmic cells (track number, track title, and track length)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "albumInfoCell", for: indexPath) as! AlbumTrackInfoTableViewCell
+            if indexPath.row > 0 && indexPath.row <= albumTracks.count {
+                cell.trackNumberLabel.text = String(albumTracks[indexPath.row-1].trackNum) + "."
+                cell.trackTitleLabel.text = albumTracks[indexPath.row-1].trackName
+                cell.trackLengthLabel.text = String(albumTracks[indexPath.row-1].trackLength) + " minutes"
+            }
+            return cell
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let height : CGFloat = 50
+        return height
     }
     
     //MARK: - Private Functions
@@ -62,15 +103,20 @@ class AlbumInfoTableViewController: UITableViewController {
         
         let promiseInfo = AlbumSingleton.shared.fetchInfo(albumId: id)
         let promiseTracks = AlbumSingleton.shared.fetchTracks(albumId: id)
+        guard let artistId = album?.albumArtistID else {fatalError("Error setting artist ID")}
+        let promiseArtist = AlbumSingleton.shared.fetchArtist(artistId: artistId)
         
-        when(fulfilled: promiseInfo, promiseTracks).map { albumInfo, trackArray in
-                self.album?.albumGenre = albumInfo.strGenre
+        when(fulfilled: promiseInfo, promiseTracks, promiseArtist).map { albumInfo, trackArray, artist in
                 self.album?.albumDescription = albumInfo.strDescriptionEN
+                self.album?.albumReleaseDate = albumInfo.intYearReleased
+            
+                self.album?.albumArtistImageUrl = artist.strArtistThumb
+            
                 self.createTrackObjects(from: trackArray)
             }.done {
+                self.tableView.reloadData()
                 self.activityIndicator.isHidden = true
                 self.activityIndicator.stopAnimating()
-                self.tableView.reloadData()
             }.catch { (error) in
                 self.displayAlertForError()
         }
@@ -86,31 +132,49 @@ class AlbumInfoTableViewController: UITableViewController {
     }
     
     private func createTrackObjects(from tracks: [Track]) {
+        var totalTime = 0
         for track in tracks {
-            let track = TrackObject(name: track.strTrack, number: track.intTrackNumber)
+            let track = TrackObject(name: track.strTrack, number: track.intTrackNumber, length: track.intDuration)
             self.albumTracks.append(track)
             self.albumTracks.sort(by: { (trackOne, trackTwo) -> Bool in
                 trackOne.trackNum < trackTwo.trackNum
             })
+            totalTime += track.trackLength
+        }
+        album?.albumLength = String(totalTime)
+    }
+    
+    @objc private func infoButtonTapped() {
+        self.performSegue(withIdentifier: "toAlbumDescription", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toAlbumDescription" {
+            guard let albumDescriptionVC = segue.destination as? AlbumDescriptionViewController else {fatalError("Error setting view controller")}
+            guard let albumDescription = album?.albumDescription else {fatalError("Error setting album description")}
+            
+            albumDescriptionVC.albumDescription = albumDescription
         }
     }
     
     private func createHeaderSection() -> UIView {
-        let header = UIView.init(frame: CGRect.init(x: 0, y: 0, width: Int(tableView.frame.width), height: 400))
+        let header = UIView.init(frame: CGRect.init(x: 0, y: 0, width: Int(tableView.frame.width), height: 300))
         
-        let imageView = UIImageView.init(frame: CGRect.init(x: (header.frame.width / 2) - 75, y: 8, width: 150 , height: 150))
-        imageView.downloadImage(from: (album?.albumImageUrl)!)
+        let imageView = UIImageView.init(frame: CGRect.init(x: 16, y: 16, width: 150 , height: 150))
+        if let imageUrl = album?.albumImageUrl {
+            imageView.downloadImage(from: imageUrl)
+        }
         
         let titleLabel = createAlbumTitleLabel(header: header)
-        let artistLabel = createAlbumArtistLabel(header: header)
-        let genreLabel = createAlbumGenreLabel(header: header)
-        let descLabel = createAlbumDescLabel(header: header)
+        let releaseDateLabel = createAlbumReleaseDateLabel(header: header)
+        let saveButton = createSaveButton()
+        let shareButton = createShareButton()
         
         header.addSubview(imageView)
         header.addSubview(titleLabel)
-        header.addSubview(artistLabel)
-        header.addSubview(genreLabel)
-        header.addSubview(descLabel)
+        header.addSubview(releaseDateLabel)
+        header.addSubview(saveButton)
+        header.addSubview(shareButton)
         
         header.clipsToBounds = true
         return header
@@ -118,44 +182,43 @@ class AlbumInfoTableViewController: UITableViewController {
     
     private func createAlbumTitleLabel(header: UIView) -> UILabel {
         let title = UILabel()
-        title.frame = CGRect.init(x: 0, y: 158, width: header.frame.width, height: 25)
-        title.text = album?.albumTitle
+        title.frame = CGRect.init(x: 190, y: 16, width: header.frame.width / 2, height: 50)
+        if let albumTitle = album?.albumTitle {
+            title.text = albumTitle
+        }
         title.font = UIFont.systemFont(ofSize: 18)
+        title.numberOfLines = 0
         title.textColor = UIColor.black
-        title.textAlignment = .center
+        title.textAlignment = .left
         return title
     }
     
-    private func createAlbumArtistLabel(header: UIView) -> UILabel {
-        let artist = UILabel()
-        artist.frame = CGRect.init(x: 0, y: 183, width: header.frame.width, height: 25)
-        artist.text = album?.albumArtist
-        artist.font = UIFont.systemFont(ofSize: 18)
-        artist.textColor = UIColor.black
-        artist.textAlignment = .center
-        return artist
+    private func createAlbumReleaseDateLabel(header: UIView) -> UILabel {
+        let releaseDate = UILabel()
+        releaseDate.frame = CGRect.init(x: 190, y: 66, width: header.frame.width / 2, height: 25)
+        if let albumReleaseDate = album?.albumReleaseDate {
+            releaseDate.text = "Released in " + albumReleaseDate
+        }
+        releaseDate.font = UIFont.systemFont(ofSize: 16)
+        releaseDate.textColor = UIColor.black
+        releaseDate.textAlignment = .left
+        return releaseDate
     }
     
-    private func createAlbumGenreLabel(header: UIView) -> UILabel {
-        let genre = UILabel()
-        genre.frame = CGRect.init(x: 0, y: 208, width: header.frame.width, height: 25)
-        genre.text = album?.albumGenre
-        genre.font = UIFont.systemFont(ofSize: 16)
-        genre.textColor = UIColor.black
-        genre.textAlignment = .center
-        return genre
+    private func createSaveButton() -> UIButton {
+        let saveButton = UIButton(frame: CGRect(x: 184, y: 100, width: 30, height: 30))
+        saveButton.backgroundColor = UIColor.clear
+        saveButton.setTitleColor(UIColor.black, for: .normal)
+        saveButton.setImage(UIImage(named: "Save"), for: .normal)
+        return saveButton
     }
     
-    private func createAlbumDescLabel(header: UIView) -> UILabel {
-        let description = UILabel()
-        description.frame = CGRect.init(x: 5, y: 233, width: header.frame.width - 25, height: 150)
-        description.text = album?.albumDescription
-        description.font = UIFont.systemFont(ofSize: 15)
-        description.textColor = UIColor.black
-        description.textAlignment = .center
-        description.lineBreakMode = .byTruncatingTail
-        description.numberOfLines = 0
-        return description
+    private func createShareButton() -> UIButton {
+        let shareButton = UIButton(frame: CGRect(x: 222, y: 100, width: 30, height: 30))
+        shareButton.backgroundColor = UIColor.clear
+        shareButton.setTitleColor(UIColor.black, for: .normal)
+        shareButton.setImage(UIImage(named: "Share"), for: .normal)
+        return shareButton
     }
 
 }

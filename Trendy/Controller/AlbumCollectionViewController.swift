@@ -63,6 +63,7 @@ class AlbumCollectionViewController: UICollectionViewController {
         AlbumSingleton.shared.fetchTrending().map { trendingAlbumArray in
                 self.createAlbumObjects(from: trendingAlbumArray)
             }.done {
+                self.collectionView.reloadData()
                 self.activityIndicatorView.stopAnimating()
                 self.activityIndicatorView.isHidden = true
             }.catch { (error) in
@@ -77,10 +78,9 @@ class AlbumCollectionViewController: UICollectionViewController {
     
     private func createAlbumObjects(from trendingAlbumArray: [AlbumData]) {
         for album in trendingAlbumArray.reversed() {
-            let albumObject = Album(rank: album.intChartPlace, title: album.strAlbum, artist: album.strArtist, id: album.idAlbum, imageUrl: album.strAlbumThumb)
+            let albumObject = Album(rank: album.intChartPlace, title: album.strAlbum, artist: album.strArtist, albmId: album.idAlbum, artistId: album.idArtist, imageUrl: album.strAlbumThumb)
             albumArray.append(albumObject)
         }
-        collectionView.reloadData()
     }
 }
 
