@@ -167,10 +167,14 @@ class AlbumInfoTableViewController: UITableViewController {
         
         let titleLabel = createAlbumTitleLabel(header: header)
         let releaseDateLabel = createAlbumReleaseDateLabel(header: header)
+        let saveButton = createSaveButton()
+        let shareButton = createShareButton()
         
         header.addSubview(imageView)
         header.addSubview(titleLabel)
         header.addSubview(releaseDateLabel)
+        header.addSubview(saveButton)
+        header.addSubview(shareButton)
         
         header.clipsToBounds = true
         return header
@@ -178,27 +182,43 @@ class AlbumInfoTableViewController: UITableViewController {
     
     private func createAlbumTitleLabel(header: UIView) -> UILabel {
         let title = UILabel()
-        title.frame = CGRect.init(x: 173, y: 16, width: header.frame.width / 2, height: 50)
+        title.frame = CGRect.init(x: 190, y: 16, width: header.frame.width / 2, height: 50)
         if let albumTitle = album?.albumTitle {
             title.text = albumTitle
         }
         title.font = UIFont.systemFont(ofSize: 18)
         title.numberOfLines = 0
         title.textColor = UIColor.black
-        title.textAlignment = .center
+        title.textAlignment = .left
         return title
     }
     
     private func createAlbumReleaseDateLabel(header: UIView) -> UILabel {
         let releaseDate = UILabel()
-        releaseDate.frame = CGRect.init(x: 173, y: 66, width: header.frame.width / 2, height: 25)
+        releaseDate.frame = CGRect.init(x: 190, y: 66, width: header.frame.width / 2, height: 25)
         if let albumReleaseDate = album?.albumReleaseDate {
             releaseDate.text = "Released in " + albumReleaseDate
         }
         releaseDate.font = UIFont.systemFont(ofSize: 16)
         releaseDate.textColor = UIColor.black
-        releaseDate.textAlignment = .center
+        releaseDate.textAlignment = .left
         return releaseDate
+    }
+    
+    private func createSaveButton() -> UIButton {
+        let saveButton = UIButton(frame: CGRect(x: 184, y: 100, width: 30, height: 30))
+        saveButton.backgroundColor = UIColor.clear
+        saveButton.setTitleColor(UIColor.black, for: .normal)
+        saveButton.setImage(UIImage(named: "Save"), for: .normal)
+        return saveButton
+    }
+    
+    private func createShareButton() -> UIButton {
+        let shareButton = UIButton(frame: CGRect(x: 222, y: 100, width: 30, height: 30))
+        shareButton.backgroundColor = UIColor.clear
+        shareButton.setTitleColor(UIColor.black, for: .normal)
+        shareButton.setImage(UIImage(named: "Share"), for: .normal)
+        return shareButton
     }
 
 }
