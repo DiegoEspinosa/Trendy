@@ -79,7 +79,7 @@ class AlbumInfoTableViewController: UITableViewController {
             return cell
         } else {
             //Dyanmic cells (track number, track title, and track length)
-            let cell = tableView.dequeueReusableCell(withIdentifier: "albumInfoCell", for: indexPath) as! AlbumTrackInfoTableViewCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "trackInfoCell", for: indexPath) as! AlbumTrackInfoTableViewCell
             if indexPath.row > 0 && indexPath.row <= albumTracks.count {
                 cell.trackNumberLabel.text = String(albumTracks[indexPath.row-1].trackNum) + "."
                 cell.trackTitleLabel.text = albumTracks[indexPath.row-1].trackName
@@ -154,6 +154,14 @@ class AlbumInfoTableViewController: UITableViewController {
             guard let albumDescription = album?.albumDescription else {fatalError("Error setting album description")}
             
             albumDescriptionVC.albumDescription = albumDescription
+        }
+        if segue.identifier == "toTrackPlayer" {
+            guard let trackPlayerVC = segue.destination as? TrackPlayerViewController else {fatalError("Error setting view controller")}
+            guard let selectedCell = sender as? AlbumTrackInfoTableViewCell else {fatalError("Error setting cell")}
+            guard let indexPath = tableView.indexPath(for: selectedCell) else {fatalError("Error getting indexPath")}
+            
+            trackPlayerVC.album = album
+            trackPlayerVC.track = albumTracks[indexPath.row-1]
         }
     }
     
