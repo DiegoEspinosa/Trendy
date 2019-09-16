@@ -16,6 +16,8 @@ class TrackPlayerViewController: UIViewController {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var navItem: UINavigationItem!
     
+    @IBOutlet weak var startTimeLabel: UILabel!
+    @IBOutlet weak var endTimeLabel: UILabel!
     var album : Album?
     var track : TrackObject?
     
@@ -45,11 +47,13 @@ class TrackPlayerViewController: UIViewController {
     }
     
     private func fillInData() {
-        guard let trackTitle = track?.trackName else {fatalError("Error setting track title")}
-        guard let trackArtist = album?.albumArtist else {fatalError("Error setting track artist")}
+        guard let track = track else {fatalError("Error setting track object")}
+        guard let album = album else {fatalError("Error setting album object")}
         
-        trackNameLabel.text = trackTitle
-        trackArtistLabel.text = trackArtist
+        trackNameLabel.text = track.trackName
+        trackArtistLabel.text = album.albumArtist
+        endTimeLabel.text = String(track.trackTime.minutes) + ":" + String(track.trackTime.seconds)
+        startTimeLabel.text = "0:00"
         
     }
 }

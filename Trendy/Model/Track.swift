@@ -11,12 +11,29 @@ import Foundation
 class TrackObject {
     var trackName : String = ""
     var trackNum : Int = 0
-    var trackLength : Int = 0
+    var trackTime : MinSec = MinSec(min: 0, sec: 0)
     
     init(name: String, number: String, length: String) {
         trackName = name
         trackNum = Int(number)!
-        trackLength = Int(length)! / 60000
+        
+        let (min,sec) = secondsToMinutesSeconds(seconds: Int(length)! / 1000)
+        trackTime.minutes = min
+        trackTime.seconds = sec
+    }
+    
+    private func secondsToMinutesSeconds(seconds: Int) -> (Int, Int) {
+        return ((seconds % 3600) / 60, (seconds % 3600) % 60)
+    }
+}
+
+struct MinSec {
+    var minutes : Int
+    var seconds : Int
+    
+    init(min: Int, sec: Int) {
+        minutes = min
+        seconds = sec
     }
 }
 

@@ -81,9 +81,10 @@ class AlbumInfoTableViewController: UITableViewController {
             //Dyanmic cells (track number, track title, and track length)
             let cell = tableView.dequeueReusableCell(withIdentifier: "trackInfoCell", for: indexPath) as! AlbumTrackInfoTableViewCell
             if indexPath.row > 0 && indexPath.row <= albumTracks.count {
-                cell.trackNumberLabel.text = String(albumTracks[indexPath.row-1].trackNum) + "."
-                cell.trackTitleLabel.text = albumTracks[indexPath.row-1].trackName
-                cell.trackLengthLabel.text = String(albumTracks[indexPath.row-1].trackLength) + " minutes"
+                let track = albumTracks[indexPath.row-1]
+                cell.trackNumberLabel.text = String(track.trackNum) + "."
+                cell.trackTitleLabel.text = track.trackName
+                cell.trackLengthLabel.text = String(track.trackTime.minutes) + " minutes "  + String(track.trackTime.seconds) + " seconds"
             }
             return cell
         }
@@ -139,9 +140,9 @@ class AlbumInfoTableViewController: UITableViewController {
             self.albumTracks.sort(by: { (trackOne, trackTwo) -> Bool in
                 trackOne.trackNum < trackTwo.trackNum
             })
-            totalTime += track.trackLength
+            totalTime += track.trackTime.minutes
         }
-        album?.albumLength = String(totalTime)
+        album?.albumLength = totalTime
     }
     
     @objc private func infoButtonTapped() {

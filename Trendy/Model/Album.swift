@@ -16,7 +16,7 @@ class Album {
     public var albumID : String = ""
     public var albumDescription : String = ""
     public var albumReleaseDate : String = ""
-    public var albumLength : String = ""
+    public var albumLength : Int = 0
     
     public var albumArtist : String = ""
     public var albumArtistID : String = ""
