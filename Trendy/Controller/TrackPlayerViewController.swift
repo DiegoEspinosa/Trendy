@@ -52,7 +52,11 @@ class TrackPlayerViewController: UIViewController {
         
         trackNameLabel.text = track.trackName
         trackArtistLabel.text = album.albumArtist
-        endTimeLabel.text = String(track.trackTime.minutes) + ":" + String(track.trackTime.seconds)
+        if track.trackTime.seconds < 10 {
+            endTimeLabel.text = String(track.trackTime.minutes) + ":0" + String(track.trackTime.seconds)
+        } else {
+            endTimeLabel.text = String(track.trackTime.minutes) + ":" + String(track.trackTime.seconds)
+        }
         startTimeLabel.text = "0:00"
         
     }
